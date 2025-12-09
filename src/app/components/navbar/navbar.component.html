@@ -1,41 +1,168 @@
-<nav class="top-0 z-50 fixed flex justify-between items-center w-full h-navbar px-10 py-6 bg-white">
-  <div class="text-xl tracking-widest">
+<nav
+  class="top-0 z-50 fixed flex justify-between items-center w-full h-navbar px-4 md:px-10 bg-white"
+>
+  <!-- Logo -->
+  <div class="text-lg md:text-xl tracking-widest">
     <span class="font-light">K.A</span>
-    <span class="ml-1 font-light text-gray-600 text-sm"
+    <span class="hidden sm:inline ml-1 font-light text-gray-600 text-xs md:text-sm"
       >| Photographer | Videographer | Editor</span
     >
   </div>
 
-  <ul class="flex gap-10 text-sm tracking-wide">
+  <!-- Desktop Menu -->
+  <ul class="hidden lg:flex gap-6 lg:gap-10 text-sm tracking-wide">
     <li>
       <a
         routerLink="/home"
         routerLinkActive="text-pink-500"
-        class="hover:text-gray-500"
+        class="hover:text-gray-500 transition-colors"
         [routerLinkActiveOptions]="{ exact: true }"
       >
         Home
       </a>
     </li>
     <li>
-      <a routerLink="/media" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+      <a
+        routerLink="/media"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500 transition-colors"
+      >
         Media
       </a>
     </li>
     <li>
-      <a routerLink="/blogs" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+      <a
+        routerLink="/blogs"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500 transition-colors"
+      >
         Blogs
       </a>
     </li>
     <li>
-      <a routerLink="/reservation" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+      <a
+        routerLink="/about"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500 transition-colors"
+      >
+        About
+      </a>
+    </li>
+    <li>
+      <a
+        routerLink="/reservation"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500 transition-colors"
+      >
         Book Session
       </a>
     </li>
     <li>
-      <a routerLink="/contact" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+      <a
+        routerLink="/contact"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500 transition-colors"
+      >
         Contact
       </a>
     </li>
   </ul>
+
+  <!-- Mobile Menu Button -->
+  <button
+    (click)="toggleMobileMenu()"
+    class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+    aria-label="Toggle mobile menu"
+  >
+    @if (!isMobileMenuOpen) {
+    <!-- Hamburger Icon -->
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M4 6h16M4 12h16M4 18h16"
+      ></path>
+    </svg>
+    } @else {
+    <!-- Close Icon -->
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      ></path>
+    </svg>
+    }
+  </button>
+
+  <!-- Mobile Menu Overlay -->
+  @if (isMobileMenuOpen) {
+  <div class="lg:hidden top-[72px] z-40 fixed inset-0 bg-white">
+    <ul class="flex flex-col space-y-6 p-6 text-lg tracking-wide">
+      <li>
+        <a
+          routerLink="/home"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeMobileMenu()"
+        >
+          Home
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/media"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          Media
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/blogs"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          Blogs
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/about"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          About
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/reservation"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          Book Session
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/contact"
+          routerLinkActive="text-pink-500"
+          class="block hover:text-gray-500 transition-colors"
+          (click)="closeMobileMenu()"
+        >
+          Contact
+        </a>
+      </li>
+    </ul>
+  </div>
+  }
 </nav>
