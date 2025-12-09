@@ -1,0 +1,308 @@
+<!-- RESERVATION SECTION -->
+<section class="px-10 py-10">
+  <!-- Title -->
+  <h1 class="mb-8 font-light text-3xl text-center tracking-[0.5em]">BOOK A SESSION</h1>
+  <p class="max-w-2xl mx-auto mb-16 text-gray-600 text-center">
+    Select an available date from the calendar below to schedule your photography session. I'll
+    contact you within 24 hours to confirm your booking.
+  </p>
+
+  <div class="max-w-4xl mx-auto">
+    <!-- Calendar Header -->
+    <div class="flex justify-between items-center mb-8">
+      <button
+        (click)="previousMonth()"
+        class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Previous month"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+
+      <h2 class="font-light text-2xl tracking-wider">
+        {{ monthNames[currentMonth] }} {{ currentYear }}
+      </h2>
+
+      <button
+        (click)="nextMonth()"
+        class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Next month"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="overflow-hidden rounded-lg bg-white shadow-lg">
+      <!-- Day Names Header -->
+      <div class="grid grid-cols-7 border-b bg-gray-50">
+        @for (dayName of dayNames; track dayName) {
+        <div class="p-4 font-medium text-gray-700 text-sm text-center">
+          {{ dayName }}
+        </div>
+        }
+      </div>
+
+      <!-- Calendar Days -->
+      <div class="grid grid-cols-7">
+        @for (calendarDay of calendarDays; track calendarDay.date.getTime()) {
+        <div
+          class="relative aspect-square p-2 border-gray-200 border-r border-b hover:bg-gray-50 transition-all cursor-pointer"
+          [class]="
+            !calendarDay.isCurrentMonth
+              ? 'bg-gray-50 text-gray-400'
+              : calendarDay.isPast
+              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              : !calendarDay.isAvailable
+              ? 'bg-red-50 text-red-400 cursor-not-allowed'
+              : 'hover:bg-pink-50 hover:text-pink-600'
+          "
+          (click)="onDayClick(calendarDay)"
+        >
+          <div class="flex justify-center items-center h-full">
+            <span
+              class="text-lg"
+              [class]="calendarDay.isAvailable && calendarDay.isCurrentMonth ? 'font-medium' : ''"
+            >
+              {{ calendarDay.day }}
+            </span>
+          </div>
+
+          <!-- Available indicator -->
+          @if (calendarDay.isAvailable && calendarDay.isCurrentMonth) {
+          <div
+            class="bottom-1 left-1/2 absolute w-2 h-2 rounded-full bg-green-400 -translate-x-1/2 transform"
+          ></div>
+          }
+
+          <!-- Unavailable indicator -->
+          @if (!calendarDay.isAvailable && calendarDay.isCurrentMonth && !calendarDay.isPast) {
+          <div
+            class="bottom-1 left-1/2 absolute w-2 h-2 rounded-full bg-red-400 -translate-x-1/2 transform"
+          ></div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="flex justify-center gap-8 mt-6 text-sm">
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+        <span class="text-gray-600">Available</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+        <span class="text-gray-600">Unavailable</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-3 h-3 rounded-full bg-gray-400"></div>
+        <span class="text-gray-600">Past Date</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reservation Modal -->
+@if (isModalOpen) {
+<div class="z-50 fixed inset-0 flex justify-center items-center p-4 bg-black bg-opacity-50">
+  <div class="w-full max-w-md max-h-[90vh] overflow-y-auto rounded-lg bg-white shadow-xl">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center p-6 border-b">
+      <div>
+        <h3 class="font-light text-xl tracking-wider">Book Session</h3>
+        @if (selectedDate) {
+        <p class="mt-1 text-gray-600 text-sm">{{ formatDate(selectedDate) }}</p>
+        }
+      </div>
+      <button
+        (click)="closeModal()"
+        class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        aria-label="Close modal"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="p-6">
+      <!-- Success Message -->
+      @if (submitSuccess) {
+      <div class="mb-6 p-4 border border-green-200 rounded-lg bg-green-50">
+        <p class="text-green-700 text-sm">{{ submitMessage }}</p>
+      </div>
+      }
+
+      <!-- Reservation Form -->
+      <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Name Field -->
+        <div>
+          <label for="name" class="block mb-1 font-medium text-gray-700 text-sm">Name *</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm"
+            placeholder="Your full name"
+          />
+          @if (getFieldError('name')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('name') }}</p>
+          }
+        </div>
+
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block mb-1 font-medium text-gray-700 text-sm">Email *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm"
+            placeholder="your@email.com"
+          />
+          @if (getFieldError('email')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('email') }}</p>
+          }
+        </div>
+
+        <!-- Phone Field -->
+        <div>
+          <label for="phone" class="block mb-1 font-medium text-gray-700 text-sm">Phone *</label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm"
+            placeholder="+1 (234) 567-8900"
+          />
+          @if (getFieldError('phone')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('phone') }}</p>
+          }
+        </div>
+
+        <!-- Session Type -->
+        <div>
+          <label for="sessionType" class="block mb-1 font-medium text-gray-700 text-sm"
+            >Session Type *</label
+          >
+          <select
+            id="sessionType"
+            formControlName="sessionType"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm"
+          >
+            <option value="">Select session type</option>
+            <option value="portrait">Portrait Session</option>
+            <option value="fashion">Fashion Photography</option>
+            <option value="branding">Personal Branding</option>
+            <option value="headshot">Professional Headshot</option>
+            <option value="creative">Creative Portrait</option>
+            <option value="other">Other (specify in message)</option>
+          </select>
+          @if (getFieldError('sessionType')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('sessionType') }}</p>
+          }
+        </div>
+
+        <!-- Time Slot -->
+        <div>
+          <label for="timeSlot" class="block mb-1 font-medium text-gray-700 text-sm"
+            >Preferred Time *</label
+          >
+          <select
+            id="timeSlot"
+            formControlName="timeSlot"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm"
+          >
+            <option value="">Select time slot</option>
+            <option value="9:00 AM - 11:00 AM">9:00 AM - 11:00 AM</option>
+            <option value="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</option>
+            <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+            <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+            <option value="6:00 PM - 8:00 PM">6:00 PM - 8:00 PM (Golden Hour)</option>
+          </select>
+          @if (getFieldError('timeSlot')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('timeSlot') }}</p>
+          }
+        </div>
+
+        <!-- Message Field -->
+        <div>
+          <label for="message" class="block mb-1 font-medium text-gray-700 text-sm"
+            >Additional Notes</label
+          >
+          <textarea
+            id="message"
+            formControlName="message"
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-transparent rounded-lg focus:ring-2 focus:ring-pink-500 text-sm resize-none"
+            placeholder="Tell me about your vision, location preferences, or any special requirements..."
+          ></textarea>
+          @if (getFieldError('message')) {
+          <p class="mt-1 text-red-600 text-xs">{{ getFieldError('message') }}</p>
+          }
+        </div>
+
+        <!-- Form Actions -->
+        <div class="flex gap-3 pt-4">
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 text-sm transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="flex-1 px-4 py-2 rounded-lg focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-black hover:bg-gray-800 disabled:opacity-50 text-white text-sm transition-all disabled:cursor-not-allowed"
+          >
+            @if (isSubmitting) {
+            <span class="flex justify-center items-center gap-2">
+              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Sending...
+            </span>
+            } @else {
+            <span>Book Session</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+}
