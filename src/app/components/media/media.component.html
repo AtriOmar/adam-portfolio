@@ -1,0 +1,26 @@
+<!-- SELECTED PROJECTS -->
+<section class="px-10 py-20">
+  <!-- Title -->
+  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em]">SELECTED PROJECTS</h2>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center">
+    <p class="text-gray-600">Loading...</p>
+  </div>
+
+  <!-- Grid -->
+  <div
+    *ngIf="!isLoading"
+    class="gap-x-10 gap-y-20 grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto"
+  >
+    <div *ngFor="let item of mediaItems" class="group">
+      <img
+        [src]="item.imageUrl"
+        [alt]="item.title"
+        class="w-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <p class="mt-4 text-gray-700 text-sm">{{ item.title }}</p>
+      <p *ngIf="item.description" class="mt-2 text-gray-500 text-xs">{{ item.description }}</p>
+    </div>
+  </div>
+</section>

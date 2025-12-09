@@ -1,0 +1,39 @@
+<nav class="flex justify-between items-center px-10 py-6">
+  <div class="text-xl tracking-widest">
+    <span class="font-light">A.K</span>
+    <span class="ml-1 font-light text-gray-600 text-sm">| Photographer</span>
+  </div>
+
+  <ul class="flex gap-10 text-sm tracking-wide">
+    <li>
+      <a
+        routerLink="/home"
+        routerLinkActive="text-pink-500"
+        class="hover:text-gray-500"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Home
+      </a>
+    </li>
+    <li>
+      <a routerLink="/media" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+        Media
+      </a>
+    </li>
+    <li>
+      <a routerLink="/blogs" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+        Blogs
+      </a>
+    </li>
+    <li>
+      <a routerLink="/about" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+        About
+      </a>
+    </li>
+    <li>
+      <a routerLink="/contact" routerLinkActive="text-pink-500" class="hover:text-gray-500">
+        Contact
+      </a>
+    </li>
+  </ul>
+</nav>
