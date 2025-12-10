@@ -69,13 +69,46 @@
       </li>
     </ul>
 
-    <!-- Special Register Button -->
-    <a
-      routerLink="/register"
-      class="ml-4 px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 shadow-lg hover:shadow-xl font-medium text-white text-sm hover:scale-105 transition-all duration-200 transform"
-    >
-      Register
-    </a>
+    <!-- Auth Section -->
+    <div class="flex items-center space-x-3 ml-4">
+      <!-- Loading State -->
+      @if (isLoading) {
+      <div class="flex items-center space-x-2">
+        <div
+          class="w-8 h-8 border-2 border-pink-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+      </div>
+      }
+
+      <!-- User Info (when logged in) -->
+      @if (!isLoading && currentUser) {
+      <app-user-dropdown
+        [user]="currentUser"
+        [isOpen]="showUserMenu"
+        (toggle)="toggleUserMenu()"
+        (logout)="logout()"
+        (close)="closeUserMenu()"
+      ></app-user-dropdown>
+      }
+
+      <!-- Auth Buttons (when not logged in) -->
+      @if (!isLoading && !currentUser) {
+      <div class="flex items-center space-x-3">
+        <a
+          routerLink="/login"
+          class="px-4 py-2 border border-pink-500 rounded-full hover:bg-pink-50 font-medium text-pink-500 text-sm transition-all duration-200"
+        >
+          Login
+        </a>
+        <a
+          routerLink="/register"
+          class="px-6 py-2 rounded-full bg-linear-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 shadow-lg hover:shadow-xl font-medium text-white text-sm hover:scale-105 transition-all duration-200 transform"
+        >
+          Register
+        </a>
+      </div>
+      }
+    </div>
   </div>
 
   <!-- Mobile Menu Button -->
@@ -111,7 +144,7 @@
   @if (isMobileMenuOpen) {
   <div class="lg:hidden top-[72px] z-40 fixed inset-0 bg-white">
     <div class="flex flex-col h-full">
-      <ul class="flex flex-col flex-grow space-y-6 p-6 text-lg tracking-wide">
+      <ul class="flex flex-col space-y-6 p-6 text-lg tracking-wide">
         <li>
           <a
             routerLink="/home"
@@ -175,15 +208,68 @@
         </li>
       </ul>
 
-      <!-- Special Register Button for Mobile -->
+      <!-- Auth Section for Mobile -->
       <div class="p-6 pt-0">
-        <a
-          routerLink="/register"
-          class="block w-full px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 shadow-lg hover:shadow-xl font-medium text-white text-lg text-center hover:scale-105 transition-all duration-200 transform"
-          (click)="closeMobileMenu()"
-        >
-          Register
-        </a>
+        <!-- Loading State -->
+        @if (isLoading) {
+        <div class="flex justify-center py-4">
+          <div
+            class="w-8 h-8 border-2 border-pink-500 border-t-transparent rounded-full animate-spin"
+          ></div>
+        </div>
+        }
+
+        <!-- User Info (when logged in) -->
+        @if (!isLoading && currentUser) {
+        <div class="space-y-3">
+          <div class="flex items-center space-x-3 p-4 rounded-lg bg-gray-50">
+            <img
+              [src]="getAvatarUrl()"
+              [alt]="currentUser.username"
+              class="w-10 h-10 object-cover border-2 border-pink-500 rounded-full"
+              (error)="$event.target.src = '/assets/images/default-avatar.svg'"
+            />
+            <div class="flex-1">
+              <p class="font-medium text-gray-900">{{ currentUser.username }}</p>
+              <p class="text-gray-500 text-sm">{{ currentUser.email }}</p>
+            </div>
+          </div>
+          <button
+            (click)="logout(); closeMobileMenu()"
+            class="w-full px-6 py-3 border border-red-500 rounded-full hover:bg-red-50 font-medium text-red-500 text-lg transition-all duration-200"
+          >
+            <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              ></path>
+            </svg>
+            Logout
+          </button>
+        </div>
+        }
+
+        <!-- Auth Buttons (when not logged in) -->
+        @if (!isLoading && !currentUser) {
+        <div class="space-y-3">
+          <a
+            routerLink="/login"
+            class="block w-full px-6 py-3 border border-pink-500 rounded-full hover:bg-pink-50 font-medium text-pink-500 text-lg text-center transition-all duration-200"
+            (click)="closeMobileMenu()"
+          >
+            Login
+          </a>
+          <a
+            routerLink="/register"
+            class="block w-full px-6 py-3 rounded-full bg-linear-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 shadow-lg hover:shadow-xl font-medium text-white text-lg text-center hover:scale-105 transition-all duration-200 transform"
+            (click)="closeMobileMenu()"
+          >
+            Register
+          </a>
+        </div>
+        }
       </div>
     </div>
   </div>

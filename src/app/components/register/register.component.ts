@@ -82,6 +82,9 @@ export class RegisterComponent {
             this.isLoading = false;
             this.successMessage = 'Account created successfully! Welcome aboard!';
 
+            // Refresh auth state since the user is now created and logged in
+            this.authService.refreshUser();
+
             // Redirect to home or login page after 2 seconds
             setTimeout(() => {
               this.router.navigate(['/home']);
