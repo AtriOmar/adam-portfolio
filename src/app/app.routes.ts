@@ -4,6 +4,7 @@ import { MediaComponent } from './components/media/media.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { RegisterComponent } from './components/register/register.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -12,4 +13,5 @@ export const routes: Routes = [
   { path: 'blogs', component: BlogsComponent },
   { path: 'reservation', component: ReservationComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'register', component: RegisterComponent },
 ];
