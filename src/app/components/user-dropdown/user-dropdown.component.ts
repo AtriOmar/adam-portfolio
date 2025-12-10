@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-user-dropdown',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-dropdown.component.html',
 })
 export class UserDropdownComponent {
@@ -42,5 +43,9 @@ export class UserDropdownComponent {
       return `http://localhost:5000${this.user.picture}`;
     }
     return '/assets/images/default-avatar.svg';
+  }
+
+  isAdmin(): boolean {
+    return this.user && this.user.accessId > 3;
   }
 }

@@ -6,14 +6,54 @@ import { ReservationComponent } from './components/reservation/reservation.compo
 import { ContactComponent } from './components/contact/contact.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { AdminGuard } from './guards/admin.guard';
+import { AdminLayoutComponent } from './components/admin/admin-layout.component';
+import { AdminDashboardComponent } from './components/admin/dashboard/admin-dashboard.component';
+import { AdminMediaComponent } from './components/admin/media/admin-media.component';
+import { AdminBlogsComponent } from './components/admin/blogs/admin-blogs.component';
+import { AdminBookingsComponent } from './components/admin/bookings/admin-bookings.component';
+import { AdminMessagesComponent } from './components/admin/messages/admin-messages.component';
+import { LayoutComponent } from './layout.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'media', component: MediaComponent },
-  { path: 'blogs', component: BlogsComponent },
-  { path: 'reservation', component: ReservationComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  {
+    path: '',
+    component: LayoutComponent,
+    children: [
+      { path: '', redirectTo: '/home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent },
+      { path: 'media', component: MediaComponent },
+      { path: 'blogs', component: BlogsComponent },
+      { path: 'reservation', component: ReservationComponent },
+      { path: 'contact', component: ContactComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: 'login', component: LoginComponent },
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminLayoutComponent,
+    canActivate: [AdminGuard],
+    children: [
+      { path: '', component: AdminDashboardComponent },
+      { path: 'media', component: AdminMediaComponent },
+      { path: 'blogs', component: AdminBlogsComponent },
+      { path: 'bookings', component: AdminBookingsComponent },
+      { path: 'messages', component: AdminMessagesComponent },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./components/admin/users/admin-users.component').then(
+            (m) => m.AdminUsersComponent
+          ),
+      },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./components/admin/settings/admin-settings.component').then(
+            (m) => m.AdminSettingsComponent
+          ),
+      },
+    ],
+  },
 ];
