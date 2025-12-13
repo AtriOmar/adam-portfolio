@@ -28,6 +28,8 @@ export class AuthService {
   public authState$ = this.authStateSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    console.log('-------------------- API_URL --------------------');
+    console.log(this.API_URL);
     this.checkInitialAuthStatus();
   }
 
@@ -54,16 +56,16 @@ export class AuthService {
   }
 
   createUser(userData: CreateUserRequest): Observable<CreateUserResponse> {
-    return this.http.post<CreateUserResponse>(`${this.API_URL}/users`, userData);
+    return this.http.post<CreateUserResponse>(`${this.API_URL}/api/users`, userData);
   }
 
   verifyUser(verificationData: VerifyUserRequest): Observable<VerifyUserResponse> {
-    return this.http.put<VerifyUserResponse>(`${this.API_URL}/users/verify`, verificationData);
+    return this.http.put<VerifyUserResponse>(`${this.API_URL}/api/users/verify`, verificationData);
   }
 
   login(credentials: LoginRequest): Observable<User> {
     return this.http
-      .post<User>(`${this.API_URL}/auth/login`, credentials, {
+      .post<User>(`${this.API_URL}/api/auth/login`, credentials, {
         withCredentials: true, // Important for session cookies
       })
       .pipe(
@@ -90,7 +92,7 @@ export class AuthService {
   }
 
   getAuthStatus(): Observable<{ user: User | null }> {
-    return this.http.get<{ user: User | null }>(`${this.API_URL}/auth/status`, {
+    return this.http.get<{ user: User | null }>(`${this.API_URL}/api/auth/status`, {
       withCredentials: true,
     });
   }

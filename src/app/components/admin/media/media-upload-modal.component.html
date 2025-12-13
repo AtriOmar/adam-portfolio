@@ -1,0 +1,178 @@
+<div class="z-50 fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+  <div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-semibold text-gray-900 text-lg">Upload Media</h2>
+      <button (click)="close()" class="text-gray-400 hover:text-gray-600" type="button">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label for="title" class="block font-medium text-gray-700 text-sm">Title *</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+          [class.border-red-300]="
+            uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched
+          "
+        />
+        <div
+          *ngIf="uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched"
+          class="mt-1 text-red-600 text-sm"
+        >
+          Title is required
+        </div>
+      </div>
+
+      <div>
+        <label for="description" class="block font-medium text-gray-700 text-sm"
+          >Description *</label
+        >
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="3"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+          [class.border-red-300]="
+            uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched
+          "
+        ></textarea>
+        <div
+          *ngIf="uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched"
+          class="mt-1 text-red-600 text-sm"
+        >
+          Description is required
+        </div>
+      </div>
+
+      <div>
+        <label for="type" class="block font-medium text-gray-700 text-sm">Type *</label>
+        <select
+          id="type"
+          formControlName="type"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+        >
+          <option value="">Select type</option>
+          <option value="image">Image</option>
+          <option value="video">Video</option>
+        </select>
+        <div
+          *ngIf="uploadForm.get('type')?.invalid && uploadForm.get('type')?.touched"
+          class="mt-1 text-red-600 text-sm"
+        >
+          Type is required
+        </div>
+      </div>
+
+      <div>
+        <label for="url" class="block font-medium text-gray-700 text-sm">URL *</label>
+        <input
+          type="url"
+          id="url"
+          formControlName="url"
+          placeholder="https://example.com/image.jpg"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+          [class.border-red-300]="uploadForm.get('url')?.invalid && uploadForm.get('url')?.touched"
+        />
+        <div
+          *ngIf="uploadForm.get('url')?.invalid && uploadForm.get('url')?.touched"
+          class="mt-1 text-red-600 text-sm"
+        >
+          Valid URL is required
+        </div>
+      </div>
+
+      <div>
+        <label for="thumbnail" class="block font-medium text-gray-700 text-sm">Thumbnail URL</label>
+        <input
+          type="url"
+          id="thumbnail"
+          formControlName="thumbnail"
+          placeholder="https://example.com/thumbnail.jpg"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+          [class.border-red-300]="
+            uploadForm.get('thumbnail')?.invalid && uploadForm.get('thumbnail')?.touched
+          "
+        />
+        <div
+          *ngIf="uploadForm.get('thumbnail')?.invalid && uploadForm.get('thumbnail')?.touched"
+          class="mt-1 text-red-600 text-sm"
+        >
+          Valid URL is required
+        </div>
+      </div>
+
+      <div>
+        <label for="category" class="block font-medium text-gray-700 text-sm">Category</label>
+        <select
+          id="category"
+          formControlName="category"
+          class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
+        >
+          <option value="">Select category</option>
+          <option value="portrait">Portrait</option>
+          <option value="wedding">Wedding</option>
+          <option value="event">Event</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          id="featured"
+          formControlName="featured"
+          class="w-4 h-4 border-gray-300 rounded focus:ring-pink-500 text-pink-600"
+        />
+        <label for="featured" class="block ml-2 text-gray-700 text-sm"> Featured </label>
+      </div>
+
+      <div *ngIf="error" class="text-red-600 text-sm">
+        {{ error }}
+      </div>
+
+      <div class="flex space-x-3 pt-4">
+        <button
+          type="button"
+          (click)="close()"
+          class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-white hover:bg-gray-50 font-medium text-gray-700 text-sm"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="uploadForm.invalid || isLoading"
+          class="flex-1 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-pink-600 hover:bg-pink-700 disabled:opacity-50 font-medium text-white text-sm disabled:cursor-not-allowed"
+        >
+          <span *ngIf="!isLoading">Upload Media</span>
+          <span *ngIf="isLoading" class="flex justify-center items-center">
+            <svg
+              class="w-4 h-4 mr-2 animate-spin"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              ></path>
+            </svg>
+            Uploading...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
