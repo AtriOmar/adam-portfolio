@@ -70,7 +70,8 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="isLoading" class="rounded-lg bg-white shadow">
+  @if (isLoading) {
+  <div class="rounded-lg bg-white shadow">
     <div class="p-6">
       <div class="py-12 text-center">
         <svg
@@ -90,9 +91,11 @@
       </div>
     </div>
   </div>
+  }
 
   <!-- Error State -->
-  <div *ngIf="error && !isLoading" class="mb-6 p-4 border border-red-200 rounded-lg bg-red-50">
+  @if (error && !isLoading) {
+  <div class="mb-6 p-4 border border-red-200 rounded-lg bg-red-50">
     <div class="flex">
       <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
         <path
@@ -112,12 +115,14 @@
       </div>
     </div>
   </div>
+  }
 
   <!-- Media Grid -->
   <div class="rounded-lg bg-white shadow">
     <div class="p-6">
       <!-- Empty State -->
-      <div *ngIf="!isLoading && filteredMedia.length === 0 && !error" class="py-12 text-center">
+      @if (!isLoading && filteredMedia.length === 0 && !error) {
+      <div class="py-12 text-center">
         <svg
           class="w-16 h-16 mx-auto mb-4 text-gray-400"
           fill="none"
@@ -146,44 +151,42 @@
           Upload Media
         </button>
       </div>
+      }
 
       <!-- Media Grid -->
-      <div
-        *ngIf="!isLoading && filteredMedia.length > 0"
-        class="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-      >
-        <div
-          *ngFor="let item of filteredMedia"
-          class="group relative overflow-hidden rounded-lg bg-gray-100"
-        >
+      @if (!isLoading && filteredMedia.length > 0) {
+      <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        @for (item of filteredMedia; track item._id) {
+        <div class="group relative overflow-hidden rounded-lg bg-gray-100">
           <!-- Media Preview -->
           <div class="relative aspect-square">
+            @if (item.type === 'image') {
             <img
-              *ngIf="item.type === 'image'"
               [src]="item.thumbnail || item.url"
               [alt]="item.title"
               class="w-full h-full object-cover"
               loading="lazy"
             />
-            <div
-              *ngIf="item.type === 'video'"
-              class="flex justify-center items-center w-full h-full bg-gray-200"
-            >
+            } @if (item.type === 'video') {
+            <div class="flex justify-center items-center w-full h-full bg-gray-200">
               <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"
                 ></path>
               </svg>
             </div>
+            }
 
             <!-- Featured Badge -->
-            <div *ngIf="item.featured" class="top-2 left-2 absolute">
+            @if (item.featured) {
+            <div class="top-2 left-2 absolute">
               <span
                 class="px-2 py-1 rounded-full bg-yellow-100 font-medium text-yellow-800 text-xs"
               >
                 Featured
               </span>
             </div>
+            }
 
             <!-- Action Buttons -->
             <div
@@ -235,22 +238,23 @@
               >
                 {{ item.type }}
               </span>
+              @if (item.category) {
               <span
-                *ngIf="item.category"
                 class="inline-flex items-center px-2 py-1 rounded-full bg-gray-100 font-medium text-gray-800 text-xs"
               >
                 {{ item.category }}
               </span>
+              }
             </div>
           </div>
         </div>
+        }
       </div>
+      }
 
       <!-- Pagination -->
-      <div
-        *ngIf="!isLoading && filteredMedia.length > 0 && totalPages > 1"
-        class="flex justify-between items-center mt-8 pt-6 border-gray-200 border-t"
-      >
+      @if (!isLoading && filteredMedia.length > 0 && totalPages > 1) {
+      <div class="flex justify-between items-center mt-8 pt-6 border-gray-200 border-t">
         <div class="sm:hidden flex flex-1 justify-between">
           <button
             (click)="changePage(currentPage - 1)"
@@ -270,10 +274,11 @@
         <div class="hidden sm:flex sm:flex-1 sm:justify-between sm:items-center">
           <div>
             <p class="text-gray-700 text-sm">
-              Showing <span class="font-medium">{{ (currentPage - 1) * itemsPerPage + 1 }}</span> to
+              Showing
+              <span class="font-medium">{{ (currentPage - 1) * itemsPerPage + 1 }}</span> to
               <!-- <span class="font-medium">{{
-                Math.min(currentPage * itemsPerPage, totalItems)
-              }}</span> -->
+                  Math.min(currentPage * itemsPerPage, totalItems)
+                }}</span> -->
               of <span class="font-medium">{{ totalItems }}</span> results
             </p>
           </div>
@@ -293,8 +298,8 @@
                 </svg>
               </button>
 
+              @for (page of getPageNumbers(); track page) {
               <button
-                *ngFor="let page of getPageNumbers()"
                 (click)="changePage(page)"
                 [class.bg-pink-50]="page === currentPage"
                 [class.border-pink-500]="page === currentPage"
@@ -306,6 +311,7 @@
               >
                 {{ page }}
               </button>
+              }
 
               <button
                 (click)="changePage(currentPage + 1)"
@@ -324,14 +330,13 @@
           </div>
         </div>
       </div>
+      }
     </div>
   </div>
 
   <!-- Upload Modal -->
-  <app-media-upload-modal
-    *ngIf="showUploadModal"
-    (closeModal)="closeUploadModal()"
-    (mediaUploaded)="onMediaUploaded()"
-  >
+  @if (showUploadModal) {
+  <app-media-upload-modal (closeModal)="closeUploadModal()" (mediaUploaded)="onMediaUploaded()">
   </app-media-upload-modal>
+  }
 </div>

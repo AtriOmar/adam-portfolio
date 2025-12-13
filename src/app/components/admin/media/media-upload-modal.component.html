@@ -1,4 +1,4 @@
-<div class="z-50 fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+<div class="z-50 fixed inset-0 flex justify-center items-center bg-black/50">
   <div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-xl">
     <div class="flex justify-between items-center mb-4">
       <h2 class="font-semibold text-gray-900 text-lg">Upload Media</h2>
@@ -26,12 +26,9 @@
             uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched
           "
         />
-        <div
-          *ngIf="uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched"
-          class="mt-1 text-red-600 text-sm"
-        >
-          Title is required
-        </div>
+        @if (uploadForm.get('title')?.invalid && uploadForm.get('title')?.touched) {
+        <div class="mt-1 text-red-600 text-sm">Title is required</div>
+        }
       </div>
 
       <div>
@@ -47,12 +44,9 @@
             uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched
           "
         ></textarea>
-        <div
-          *ngIf="uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched"
-          class="mt-1 text-red-600 text-sm"
-        >
-          Description is required
-        </div>
+        @if (uploadForm.get('description')?.invalid && uploadForm.get('description')?.touched) {
+        <div class="mt-1 text-red-600 text-sm">Description is required</div>
+        }
       </div>
 
       <div>
@@ -66,12 +60,9 @@
           <option value="image">Image</option>
           <option value="video">Video</option>
         </select>
-        <div
-          *ngIf="uploadForm.get('type')?.invalid && uploadForm.get('type')?.touched"
-          class="mt-1 text-red-600 text-sm"
-        >
-          Type is required
-        </div>
+        @if (uploadForm.get('type')?.invalid && uploadForm.get('type')?.touched) {
+        <div class="mt-1 text-red-600 text-sm">Type is required</div>
+        }
       </div>
 
       <div>
@@ -84,12 +75,9 @@
           class="block w-full mt-1 px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 text-sm"
           [class.border-red-300]="uploadForm.get('url')?.invalid && uploadForm.get('url')?.touched"
         />
-        <div
-          *ngIf="uploadForm.get('url')?.invalid && uploadForm.get('url')?.touched"
-          class="mt-1 text-red-600 text-sm"
-        >
-          Valid URL is required
-        </div>
+        @if (uploadForm.get('url')?.invalid && uploadForm.get('url')?.touched) {
+        <div class="mt-1 text-red-600 text-sm">Valid URL is required</div>
+        }
       </div>
 
       <div>
@@ -104,12 +92,9 @@
             uploadForm.get('thumbnail')?.invalid && uploadForm.get('thumbnail')?.touched
           "
         />
-        <div
-          *ngIf="uploadForm.get('thumbnail')?.invalid && uploadForm.get('thumbnail')?.touched"
-          class="mt-1 text-red-600 text-sm"
-        >
-          Valid URL is required
-        </div>
+        @if (uploadForm.get('thumbnail')?.invalid && uploadForm.get('thumbnail')?.touched) {
+        <div class="mt-1 text-red-600 text-sm">Valid URL is required</div>
+        }
       </div>
 
       <div>
@@ -137,9 +122,11 @@
         <label for="featured" class="block ml-2 text-gray-700 text-sm"> Featured </label>
       </div>
 
-      <div *ngIf="error" class="text-red-600 text-sm">
+      @if (error) {
+      <div class="text-red-600 text-sm">
         {{ error }}
       </div>
+      }
 
       <div class="flex space-x-3 pt-4">
         <button
@@ -154,8 +141,10 @@
           [disabled]="uploadForm.invalid || isLoading"
           class="flex-1 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-pink-600 hover:bg-pink-700 disabled:opacity-50 font-medium text-white text-sm disabled:cursor-not-allowed"
         >
-          <span *ngIf="!isLoading">Upload Media</span>
-          <span *ngIf="isLoading" class="flex justify-center items-center">
+          @if (!isLoading) {
+          <span>Upload Media</span>
+          } @if (isLoading) {
+          <span class="flex justify-center items-center">
             <svg
               class="w-4 h-4 mr-2 animate-spin"
               fill="none"
@@ -171,6 +160,7 @@
             </svg>
             Uploading...
           </span>
+          }
         </button>
       </div>
     </form>

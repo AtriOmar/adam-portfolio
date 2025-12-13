@@ -7,3 +7,9 @@
 @theme inline {
   --spacing-navbar: var(--navbar-height);
 }
+
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+}
