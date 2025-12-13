@@ -3,7 +3,7 @@
     <img
       [src]="getAvatarUrl()"
       [alt]="user.username"
-      class="w-8 h-8 object-cover border-2 border-pink-500 rounded-full"
+      class="w-8 h-8 object-cover border-2 border-gray-400 rounded-full"
       (error)="$event.target.src = '/assets/images/default-avatar.svg'"
     />
     <span class="hidden md:block font-medium text-gray-700 text-sm">{{ user.email }}</span>

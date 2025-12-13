@@ -34,14 +34,14 @@ export class UserDropdownComponent {
   }
 
   getAvatarUrl(): string {
-    if (this.user?.picture) {
-      // Handle both relative and absolute URLs
-      if (this.user.picture.startsWith('http')) {
-        return this.user.picture;
-      }
-      // For relative paths from your backend
-      return `http://localhost:5000${this.user.picture}`;
-    }
+    // if (this.user?.picture) {
+    //   // Handle both relative and absolute URLs
+    //   if (this.user.picture.startsWith('http')) {
+    //     return this.user.picture;
+    //   }
+    //   // For relative paths from your backend
+    //   return `http://localhost:5000${this.user.picture}`;
+    // }
     return '/assets/images/default-avatar.svg';
   }
 
