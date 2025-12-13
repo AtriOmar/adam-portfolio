@@ -1,29 +1,53 @@
 <!-- SELECTED PROJECTS -->
-<section class="px-10 py-10">
-  <!-- Title -->
-  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em]">SELECTED PROJECTS</h2>
+<section class="overflow-hidden px-10 py-10">
+  <!-- Title with fade-in animation -->
+  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em] animate-fade-in">
+    SELECTED PROJECTS
+  </h2>
 
-  <!-- Loading State -->
+  <!-- Enhanced Loading State with spinner -->
   @if (isLoading) {
-  <div class="text-center">
-    <p class="text-gray-600">Loading...</p>
+  <div class="py-20 text-center">
+    <div
+      class="inline-block w-12 h-12 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin"
+    ></div>
+    <p class="mt-4 text-gray-600 animate-pulse">Loading projects...</p>
   </div>
   }
 
-  <!-- Grid -->
+  <!-- Grid with staggered animations -->
   @if (!isLoading) {
   <div class="gap-x-10 gap-y-20 grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto">
-    @for (item of mediaItems; track item._id) {
-    <div class="group">
-      <img
-        [src]="item.thumbnail || item.url"
-        [alt]="item.title"
-        class="w-full object-cover group-hover:scale-105 transition-transform duration-300"
-      />
-      <p class="mt-4 text-gray-700 text-sm">{{ item.title }}</p>
-      @if (item.description) {
-      <p class="mt-2 text-gray-500 text-xs">{{ item.description }}</p>
-      }
+    @for (item of mediaItems; track item._id; let i = $index) {
+    <div class="group animate-fade-in-up cursor-pointer" [style.animation-delay]="i * 0.1 + 's'">
+      <!-- Image Container with overlay effect -->
+      <div class="relative overflow-hidden rounded-sm">
+        <img
+          [src]="item.thumbnail || item.url"
+          [alt]="item.title"
+          class="w-full h-64 object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-500 ease-out"
+        />
+        <!-- Overlay that appears on hover -->
+        <div
+          class="absolute inset-0 flex justify-center items-center bg-black/0 group-hover:bg-black/10 transition-all duration-300"
+        ></div>
+      </div>
+
+      <!-- Text Content with slide-up animation -->
+      <div class="mt-4 transition-transform group-hover:-translate-y-1 duration-300">
+        <p
+          class="font-medium text-gray-900 group-hover:text-gray-600 text-sm tracking-wide transition-colors duration-300"
+        >
+          {{ item.title }}
+        </p>
+        @if (item.description) {
+        <p
+          class="mt-2 text-gray-500 group-hover:text-gray-700 text-xs leading-relaxed transition-colors duration-300"
+        >
+          {{ item.description }}
+        </p>
+        }
+      </div>
     </div>
     }
   </div>
