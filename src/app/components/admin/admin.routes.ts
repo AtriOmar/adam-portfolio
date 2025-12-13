@@ -4,6 +4,7 @@ import { AdminLayoutComponent } from './admin-layout.component';
 import { AdminDashboardComponent } from './dashboard/admin-dashboard.component';
 import { AdminMediaComponent } from './media/admin-media.component';
 import { AdminBlogsComponent } from './blogs/admin-blogs.component';
+import { BlogEditor } from './blog-editor/blog-editor';
 import { AdminBookingsComponent } from './bookings/admin-bookings.component';
 import { AdminMessagesComponent } from './messages/admin-messages.component';
 import { AdminUsersComponent } from './users/admin-users.component';
@@ -20,12 +21,20 @@ export const ADMIN_ROUTES: Routes = [
         component: AdminDashboardComponent,
       },
       {
-        path: 'media',
+        path: 'work',
         component: AdminMediaComponent,
       },
       {
         path: 'blogs',
         component: AdminBlogsComponent,
+      },
+      {
+        path: 'blogs/new',
+        component: BlogEditor,
+      },
+      {
+        path: 'blogs/edit/:id',
+        component: BlogEditor,
       },
       {
         path: 'bookings',

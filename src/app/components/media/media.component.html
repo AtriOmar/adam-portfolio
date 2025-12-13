@@ -1,9 +1,7 @@
 <!-- SELECTED PROJECTS -->
 <section class="overflow-hidden px-10 py-10">
   <!-- Title with fade-in animation -->
-  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em] animate-fade-in">
-    SELECTED PROJECTS
-  </h2>
+  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em] animate-fade-in">WORK</h2>
 
   <!-- Enhanced Loading State with spinner -->
   @if (isLoading) {
@@ -21,7 +19,7 @@
     @for (item of mediaItems; track item._id; let i = $index) {
     <div class="group animate-fade-in-up cursor-pointer" [style.animation-delay]="i * 0.1 + 's'">
       <!-- Image Container with overlay effect -->
-      <div class="relative overflow-hidden rounded-sm">
+      <div class="relative overflow-hidden rounded-sm bg-slate-200">
         <img
           [src]="item.thumbnail || item.url"
           [alt]="item.title"

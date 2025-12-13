@@ -14,6 +14,9 @@ import { AdminBlogsComponent } from './components/admin/blogs/admin-blogs.compon
 import { AdminBookingsComponent } from './components/admin/bookings/admin-bookings.component';
 import { AdminMessagesComponent } from './components/admin/messages/admin-messages.component';
 import { LayoutComponent } from './layout.component';
+import { AdminUsersComponent } from './components/admin/users/admin-users.component';
+import { AdminSettingsComponent } from './components/admin/settings/admin-settings.component';
+import { BlogEditor } from './components/admin/blog-editor/blog-editor';
 
 export const routes: Routes = [
   {
@@ -22,7 +25,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: '/home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
-      { path: 'media', component: MediaComponent },
+      { path: 'work', component: MediaComponent },
       { path: 'blogs', component: BlogsComponent },
       { path: 'reservation', component: ReservationComponent },
       { path: 'contact', component: ContactComponent },
@@ -38,22 +41,11 @@ export const routes: Routes = [
       { path: '', component: AdminDashboardComponent },
       { path: 'media', component: AdminMediaComponent },
       { path: 'blogs', component: AdminBlogsComponent },
+      { path: 'blogs/new', component: BlogEditor },
       { path: 'bookings', component: AdminBookingsComponent },
       { path: 'messages', component: AdminMessagesComponent },
-      {
-        path: 'users',
-        loadComponent: () =>
-          import('./components/admin/users/admin-users.component').then(
-            (m) => m.AdminUsersComponent
-          ),
-      },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./components/admin/settings/admin-settings.component').then(
-            (m) => m.AdminSettingsComponent
-          ),
-      },
+      { path: 'users', component: AdminUsersComponent },
+      { path: 'settings', component: AdminSettingsComponent },
     ],
   },
 ];

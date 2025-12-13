@@ -1,4 +1,4 @@
-<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
+<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-12 bg-linear-to-br from-gray-50 to-gray-100">
   <div class="max-w-md mx-auto">
     <div class="p-8 rounded-lg bg-white shadow-xl">
       <!-- Header -->
@@ -86,7 +86,7 @@
         <button
           type="submit"
           [disabled]="isLoading"
-          class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-gradient-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 disabled:opacity-50 font-medium text-white transition-all duration-200 disabled:cursor-not-allowed"
+          class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-linear-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 disabled:opacity-50 font-medium text-white transition-all duration-200 disabled:cursor-not-allowed"
         >
           @if (!isLoading) {
           <span>Sign In</span>
@@ -122,7 +122,7 @@
       @if (errorMessage) {
       <div class="mt-4 p-4 border border-red-200 rounded-lg bg-red-50">
         <div class="flex">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <svg class="w-5 h-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fill-rule="evenodd"
@@ -142,7 +142,7 @@
       @if (successMessage) {
       <div class="mt-4 p-4 border border-green-200 rounded-lg bg-green-50">
         <div class="flex">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <svg class="w-5 h-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
               <path
                 fill-rule="evenodd"

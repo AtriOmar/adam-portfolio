@@ -1,0 +1,259 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="font-bold text-gray-900 text-2xl">
+        {{ isEditing ? 'Edit Blog Post' : 'Create New Blog Post' }}
+      </h1>
+      <p class="mt-1 text-gray-600 text-sm">
+        {{ isEditing ? 'Update your blog post' : 'Share your photography stories and insights' }}
+      </p>
+    </div>
+    <button
+      (click)="onCancel()"
+      class="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 font-medium text-gray-700 text-sm transition-colors"
+    >
+      <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
+      </svg>
+      Cancel
+    </button>
+  </div>
+
+  @if (loading) {
+  <div class="py-12 text-center">
+    <div class="inline-block w-8 h-8 border-pink-600 border-b-2 rounded-full animate-spin"></div>
+    <p class="mt-2 text-gray-500">Loading blog post...</p>
+  </div>
+  } @else { @if (error) {
+  <div class="mb-6 p-4 border border-red-200 rounded-md bg-red-50">
+    <div class="flex">
+      <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <div class="ml-3">
+        <p class="text-red-800 text-sm">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+  }
+
+  <form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="space-y-6 p-6 rounded-lg bg-white shadow">
+      <!-- Title -->
+      <div>
+        <label for="title" class="block mb-2 font-medium text-gray-700 text-sm"> Title * </label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+          placeholder="Enter your blog post title..."
+        />
+        @if (getFieldError('title')) {
+        <p class="mt-1 text-red-600 text-sm">{{ getFieldError('title') }}</p>
+        }
+      </div>
+
+      <!-- Excerpt -->
+      <div>
+        <label for="excerpt" class="block mb-2 font-medium text-gray-700 text-sm">
+          Excerpt
+          <span class="font-normal text-gray-500">(Optional, max 300 characters)</span>
+        </label>
+        <textarea
+          id="excerpt"
+          formControlName="excerpt"
+          rows="3"
+          class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+          placeholder="Brief description of your blog post..."
+        ></textarea>
+        @if (getFieldError('excerpt')) {
+        <p class="mt-1 text-red-600 text-sm">{{ getFieldError('excerpt') }}</p>
+        }
+      </div>
+
+      <!-- Content -->
+      <div>
+        <label for="content" class="block mb-2 font-medium text-gray-700 text-sm">
+          Content *
+        </label>
+        <quill-editor
+          formControlName="content"
+          [modules]="quillModules"
+          placeholder="Start writing your blog post..."
+          class="bg-white"
+        ></quill-editor>
+        @if (getFieldError('content')) {
+        <p class="mt-1 text-red-600 text-sm">{{ getFieldError('content') }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="gap-6 grid grid-cols-1 md:grid-cols-2">
+      <!-- Left Column -->
+      <div class="space-y-6 p-6 rounded-lg bg-white shadow">
+        <h3 class="font-medium text-gray-900 text-lg">Blog Details</h3>
+
+        <!-- Author -->
+        <div>
+          <label for="author" class="block mb-2 font-medium text-gray-700 text-sm">
+            Author *
+          </label>
+          <input
+            type="text"
+            id="author"
+            formControlName="author"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+            placeholder="Author name..."
+          />
+          @if (getFieldError('author')) {
+          <p class="mt-1 text-red-600 text-sm">{{ getFieldError('author') }}</p>
+          }
+        </div>
+
+        <!-- Category -->
+        <div>
+          <label for="category" class="block mb-2 font-medium text-gray-700 text-sm">
+            Category
+          </label>
+          <select
+            id="category"
+            formControlName="category"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+          >
+            @for (category of categories; track category.value) {
+            <option [value]="category.value">{{ category.label }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <label for="tags" class="block mb-2 font-medium text-gray-700 text-sm">
+            Tags
+            <span class="font-normal text-gray-500">(Comma-separated)</span>
+          </label>
+          <input
+            type="text"
+            id="tags"
+            formControlName="tags"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+            placeholder="photography, tips, tutorial..."
+          />
+        </div>
+
+        <!-- Meta Description -->
+        <div>
+          <label for="metaDescription" class="block mb-2 font-medium text-gray-700 text-sm">
+            Meta Description
+            <span class="font-normal text-gray-500">(SEO, max 160 characters)</span>
+          </label>
+          <textarea
+            id="metaDescription"
+            formControlName="metaDescription"
+            rows="2"
+            class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+            placeholder="Brief description for search engines..."
+          ></textarea>
+          @if (getFieldError('metaDescription')) {
+          <p class="mt-1 text-red-600 text-sm">{{ getFieldError('metaDescription') }}</p>
+          }
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="space-y-6 p-6 rounded-lg bg-white shadow">
+        <h3 class="font-medium text-gray-900 text-lg">Publishing & Media</h3>
+
+        <!-- Featured Image -->
+        <div formGroupName="featuredImage">
+          <label class="block mb-2 font-medium text-gray-700 text-sm"> Featured Image </label>
+          <div class="space-y-3">
+            <input
+              type="url"
+              formControlName="url"
+              class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+              placeholder="https://example.com/image.jpg"
+            />
+            <input
+              type="text"
+              formControlName="alt"
+              class="w-full px-3 py-2 border border-gray-300 focus:border-pink-500 rounded-md focus:outline-none focus:ring-pink-500 shadow-sm"
+              placeholder="Alt text for accessibility..."
+            />
+          </div>
+        </div>
+
+        <!-- Status Toggles -->
+        <div class="space-y-4">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="published"
+              formControlName="published"
+              class="w-4 h-4 border-gray-300 rounded focus:ring-pink-500 text-pink-600"
+            />
+            <label for="published" class="block ml-2 font-medium text-gray-700 text-sm">
+              Publish immediately
+            </label>
+          </div>
+
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="featured"
+              formControlName="featured"
+              class="w-4 h-4 border-gray-300 rounded focus:ring-pink-500 text-pink-600"
+            />
+            <label for="featured" class="block ml-2 font-medium text-gray-700 text-sm">
+              Feature this post
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end space-x-4 pt-6">
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="px-6 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 font-medium text-gray-700 transition-colors"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        [disabled]="saving || blogForm.invalid"
+        class="flex items-center px-6 py-2 rounded-md bg-pink-600 hover:bg-pink-700 disabled:opacity-50 font-medium text-white transition-colors"
+      >
+        @if (saving) {
+        <div
+          class="inline-block w-4 h-4 mr-2 border-white border-b-2 rounded-full animate-spin"
+        ></div>
+        } @else {
+        <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          ></path>
+        </svg>
+        }
+        {{ isEditing ? 'Update Post' : 'Create Post' }}
+      </button>
+    </div>
+  </form>
+  }
+</div>

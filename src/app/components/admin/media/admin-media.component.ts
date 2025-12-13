@@ -17,6 +17,7 @@ export class AdminMediaComponent implements OnInit {
   isLoading = false;
   error = '';
   showUploadModal = false;
+  Math = Math;
 
   // Filter and search properties
   filters: MediaFilters = {
