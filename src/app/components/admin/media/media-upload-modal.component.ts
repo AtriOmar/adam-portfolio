@@ -17,6 +17,7 @@ export class MediaUploadModalComponent {
   uploadForm: FormGroup;
   isLoading = false;
   error = '';
+  isVisible = false;
 
   constructor(private fb: FormBuilder, private mediaService: MediaService) {
     this.uploadForm = this.fb.group({
@@ -28,6 +29,11 @@ export class MediaUploadModalComponent {
       category: [''],
       featured: [false],
     });
+
+    // Trigger fade in animation after component initialization
+    setTimeout(() => {
+      this.isVisible = true;
+    }, 10);
   }
 
   onSubmit() {
@@ -62,6 +68,10 @@ export class MediaUploadModalComponent {
   }
 
   close() {
-    this.closeModal.emit();
+    this.isVisible = false;
+    // Wait for animation to complete before emitting close event
+    setTimeout(() => {
+      this.closeModal.emit();
+    }, 300);
   }
 }

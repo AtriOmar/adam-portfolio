@@ -13,10 +13,10 @@
   <!-- Grid -->
   @if (!isLoading) {
   <div class="gap-x-10 gap-y-20 grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto">
-    @for (item of mediaItems; track item.id) {
+    @for (item of mediaItems; track item._id) {
     <div class="group">
       <img
-        [src]="item.imageUrl"
+        [src]="item.thumbnail || item.url"
         [alt]="item.title"
         class="w-full object-cover group-hover:scale-105 transition-transform duration-300"
       />

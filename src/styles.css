@@ -8,7 +8,15 @@
   --spacing-navbar: var(--navbar-height);
 }
 
+@utility scrollbar-stable {
+  scrollbar-gutter: stable;
+}
+
 @layer base {
+  html {
+    @apply scrollbar-stable;
+  }
+
   button {
     @apply cursor-pointer;
   }

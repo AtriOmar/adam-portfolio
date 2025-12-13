@@ -1,5 +1,15 @@
-<div class="z-50 fixed inset-0 flex justify-center items-center bg-black/50">
-  <div class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-xl">
+<div
+  class="z-50 fixed inset-0 flex justify-center items-center bg-black/50 transition-opacity duration-300"
+  [class.opacity-0]="!isVisible"
+  [class.opacity-100]="isVisible"
+>
+  <div
+    class="w-full max-w-md mx-4 p-6 rounded-lg bg-white shadow-xl transition-all duration-300 transform"
+    [class.scale-95]="!isVisible"
+    [class.opacity-0]="!isVisible"
+    [class.scale-100]="isVisible"
+    [class.opacity-100]="isVisible"
+  >
     <div class="flex justify-between items-center mb-4">
       <h2 class="font-semibold text-gray-900 text-lg">Upload Media</h2>
       <button (click)="close()" class="text-gray-400 hover:text-gray-600" type="button">
