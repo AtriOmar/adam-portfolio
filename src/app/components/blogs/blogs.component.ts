@@ -55,7 +55,7 @@ export class BlogsComponent implements OnInit {
       content: '<p>Portrait photography is one of the most rewarding genres of photography...</p>',
       excerpt:
         'Learn the fundamental techniques that will transform your portrait photography from amateur to professional level.',
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1554048612-b6ebae92138d?auto=format&fit=crop&w=800&q=80',
         alt: 'Portrait photography setup',
@@ -79,7 +79,7 @@ export class BlogsComponent implements OnInit {
         '<p>Take a look behind the scenes of our latest urban fashion photography session...</p>',
       excerpt:
         'Go behind the scenes of an urban fashion shoot and discover the creative process from concept to final image.',
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80',
         alt: 'Behind the scenes fashion shoot',
@@ -102,7 +102,7 @@ export class BlogsComponent implements OnInit {
       content: '<p>In this comprehensive review, we test the latest camera lenses...</p>',
       excerpt:
         'Our comprehensive review of the best camera lenses for portrait and fashion photography in 2024.',
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?auto=format&fit=crop&w=800&q=80',
         alt: 'Camera lenses review',
@@ -126,7 +126,7 @@ export class BlogsComponent implements OnInit {
         '<p>Master these creative lighting techniques to elevate your indoor photography...</p>',
       excerpt:
         'Discover professional lighting techniques that will transform your indoor photography and create stunning results.',
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1547036967-23d11aacaee0?auto=format&fit=crop&w=800&q=80',
         alt: 'Studio lighting setup',
@@ -150,7 +150,7 @@ export class BlogsComponent implements OnInit {
         '<p>Working with Sarah on her personal branding photography was an incredible experience...</p>',
       excerpt:
         "Follow the journey of Sarah's personal branding session from initial consultation to final delivery.",
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
         alt: 'Personal branding session',
@@ -173,7 +173,7 @@ export class BlogsComponent implements OnInit {
       content: '<p>As we look ahead to 2025, the photography industry continues to evolve...</p>',
       excerpt:
         'Explore the emerging trends and technologies that will shape the photography industry in 2025 and beyond.',
-      author: 'Adam Khlif',
+      author: 'Khlif Adam',
       featuredImage: {
         url: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80',
         alt: 'Future of photography',

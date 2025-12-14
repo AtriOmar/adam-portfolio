@@ -1,0 +1,400 @@
+<div>
+  <div class="mb-6">
+    <h1 class="font-bold text-gray-900 text-2xl">Contact Messages</h1>
+    <p class="mt-1 text-gray-600 text-sm">View and respond to client inquiries</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="gap-6 grid grid-cols-1 md:grid-cols-3 mb-6">
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="shrink-0">
+            <svg
+              class="w-6 h-6 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Unread</dt>
+              <dd class="font-medium text-gray-900 text-lg">{{ stats.unread }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="shrink-0">
+            <svg
+              class="w-6 h-6 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Replied</dt>
+              <dd class="font-medium text-gray-900 text-lg">{{ stats.replied }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="shrink-0">
+            <svg
+              class="w-6 h-6 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Total</dt>
+              <dd class="font-medium text-gray-900 text-lg">{{ stats.total }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="mb-6 p-4 rounded-lg bg-white shadow">
+    <div class="flex flex-wrap items-center gap-4">
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="onStatusFilterChange()"
+        class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+      >
+        <option value="all">All Messages</option>
+        <option value="unread">Unread</option>
+        <option value="read">Read</option>
+        <option value="replied">Replied</option>
+      </select>
+      <input
+        type="date"
+        [(ngModel)]="dateFrom"
+        (change)="onDateFilterChange()"
+        class="px-3 py-2 border border-gray-300 rounded-md text-sm"
+        placeholder="Date from"
+      />
+      <div class="flex-1"></div>
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="Search messages..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchChange()"
+          class="w-64 py-2 pr-4 pl-10 border border-gray-300 rounded-md text-sm"
+        />
+        <svg
+          class="top-2.5 left-3 absolute w-4 h-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+  <div class="rounded-lg bg-white shadow">
+    <div class="sm:p-6 px-4 py-5">
+      <div class="py-12 text-center">
+        <div
+          class="w-8 h-8 mx-auto mb-4 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+        <p class="text-gray-500">Loading messages...</p>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+  <div class="mb-6 p-4 border border-red-200 rounded-lg bg-red-50">
+    <div class="flex">
+      <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd"
+        ></path>
+      </svg>
+      <div class="ml-3">
+        <p class="font-medium text-red-800 text-sm">Error</p>
+        <p class="mt-1 text-red-700 text-sm">{{ error }}</p>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Messages List -->
+  <div class="rounded-lg bg-white shadow">
+    <div class="sm:p-6 px-4 py-5">
+      <!-- No messages state -->
+      @if (!loading && messages.length === 0) {
+      <div class="py-12 text-center">
+        <svg
+          class="w-16 h-16 mx-auto mb-4 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7"
+          ></path>
+        </svg>
+        <h3 class="mb-2 font-medium text-gray-900 text-lg">No messages found</h3>
+        <p class="mb-4 text-gray-500">Contact messages from your website will appear here.</p>
+        <div class="text-gray-500 text-sm">
+          <p>Clients can reach out through the contact form on your website.</p>
+        </div>
+      </div>
+      }
+
+      <!-- Messages table -->
+      @if (!loading && messages.length > 0) {
+      <div>
+        <div class="w-0 min-w-full overflow-auto border border-gray-200 rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                >
+                  Contact
+                </th>
+                <th
+                  class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                >
+                  Subject
+                </th>
+                <th
+                  class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                >
+                  Date
+                </th>
+                <th
+                  class="px-6 py-3 font-medium text-gray-500 text-xs text-left uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              @for (message of messages; track message.id) {
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div>
+                    <div class="font-medium text-gray-900 text-sm">
+                      {{ message.attributes.name }}
+                    </div>
+                    <div class="text-gray-500 text-sm">{{ message.attributes.email }}</div>
+                    @if (message.attributes.phone) {
+                    <div class="text-gray-500 text-xs">
+                      {{ message.attributes.phone }}
+                    </div>
+                    }
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="text-gray-900 text-sm line-clamp-2">
+                    {{ message.attributes.subject }}
+                  </div>
+                  <div class="max-w-xs text-gray-500 text-sm truncate">
+                    {{ message.attributes.message }}
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span
+                    class="inline-flex px-2 rounded-full font-semibold text-xs"
+                    [class]="getStatusBadgeClass(message.attributes.status)"
+                  >
+                    {{ message.attributes.status | titlecase }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-gray-500 text-sm whitespace-nowrap">
+                  {{ formatDate(message.attributes.createdAt) }}
+                </td>
+                <td class="px-6 py-4 font-medium text-sm whitespace-nowrap">
+                  <button
+                    (click)="openMessageModal(message)"
+                    class="mr-3 text-blue-600 hover:text-blue-900"
+                  >
+                    View
+                  </button>
+                  @if (message.attributes.status !== 'replied') {
+                  <button
+                    (click)="markAsReplied(message)"
+                    class="text-green-600 hover:text-green-900"
+                  >
+                    Mark Replied
+                  </button>
+                  }
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (totalPages > 1) {
+        <div class="flex justify-between items-center mt-6">
+          <div class="text-gray-700 text-sm">Page {{ currentPage }} of {{ totalPages }}</div>
+          <div class="flex space-x-2">
+            <button
+              (click)="prevPage()"
+              [disabled]="currentPage === 1"
+              class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 text-sm disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <button
+              (click)="nextPage()"
+              [disabled]="currentPage === totalPages"
+              class="px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 text-sm disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Modal -->
+  @if (showModal) {
+  <div class="z-50 fixed inset-0 overflow-y-auto">
+    <div class="flex justify-center items-center min-h-screen sm:p-0 px-4 pt-4 pb-20 text-center">
+      <div class="fixed inset-0 bg-gray-500/25 transition-opacity" (click)="closeModal()"></div>
+
+      <div
+        class="relative sm:w-full sm:max-w-lg overflow-hidden sm:my-8 sm:p-6 px-4 pt-5 pb-4 rounded-lg bg-white shadow-xl text-left"
+      >
+        @if (selectedMessage) {
+        <div>
+          <div class="mb-4">
+            <h3 class="font-medium text-gray-900 text-lg leading-6">Message Details</h3>
+          </div>
+
+          <div class="space-y-4 max-h-[calc(100dvh-220px)] overflow-auto">
+            <div>
+              <label class="block font-medium text-gray-700 text-sm">From</label>
+              <p class="mt-1 text-gray-900">{{ selectedMessage.attributes.name }}</p>
+              <p class="text-gray-500 text-sm">{{ selectedMessage.attributes.email }}</p>
+              @if (selectedMessage.attributes.phone) {
+              <p class="text-gray-500 text-sm">
+                {{ selectedMessage.attributes.phone }}
+              </p>
+              }
+            </div>
+
+            <div>
+              <label class="block font-medium text-gray-700 text-sm">Subject</label>
+              <p class="mt-1 text-gray-900">{{ selectedMessage.attributes.subject }}</p>
+            </div>
+
+            <div>
+              <label class="block font-medium text-gray-700 text-sm">Message</label>
+              <p class="mt-1 text-gray-900 whitespace-pre-wrap">
+                {{ selectedMessage.attributes.message }}
+              </p>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <div>
+                <label class="block font-medium text-gray-700 text-sm">Status</label>
+                <span
+                  class="inline-flex mt-1 px-2 rounded-full font-semibold text-xs"
+                  [class]="getStatusBadgeClass(selectedMessage.attributes.status)"
+                >
+                  {{ selectedMessage.attributes.status | titlecase }}
+                </span>
+              </div>
+              <div class="text-right">
+                <label class="block font-medium text-gray-700 text-sm">Received</label>
+                <p class="mt-1 text-gray-500 text-sm">
+                  {{ formatDate(selectedMessage.attributes.createdAt) }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between mt-6">
+            <div class="space-x-2">
+              @if (selectedMessage.attributes.status !== 'replied') {
+              <button
+                (click)="markAsReplied(selectedMessage)"
+                class="inline-flex justify-center px-4 py-2 border border-transparent rounded-md bg-green-600 hover:bg-green-700 font-medium text-white text-sm"
+              >
+                Mark as Replied
+              </button>
+              }
+            </div>
+            <button
+              (click)="closeModal()"
+              class="inline-flex justify-center px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 font-medium text-gray-700 text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  }
+</div>

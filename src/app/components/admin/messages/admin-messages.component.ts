@@ -1,174 +1,170 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ContactService, Contact, ContactStats } from '../../../services/contact.service';
 
 @Component({
   selector: 'app-admin-messages',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div>
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Contact Messages</h1>
-        <p class="mt-1 text-sm text-gray-600">View and respond to client inquiries</p>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-blue-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Unread</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Replied</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-gray-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Total</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="mb-6 bg-white shadow rounded-lg p-4">
-        <div class="flex flex-wrap gap-4 items-center">
-          <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
-            <option>All Messages</option>
-            <option>Unread</option>
-            <option>Read</option>
-            <option>Replied</option>
-          </select>
-          <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
-            <option>All Types</option>
-            <option>General Inquiry</option>
-            <option>Booking Request</option>
-            <option>Portfolio Feedback</option>
-          </select>
-          <input
-            type="date"
-            class="border border-gray-300 rounded-md px-3 py-2 text-sm"
-            placeholder="Date from"
-          />
-          <div class="flex-1"></div>
-          <div class="relative">
-            <input
-              type="text"
-              placeholder="Search messages..."
-              class="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm w-64"
-            />
-            <svg
-              class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Messages List -->
-      <div class="bg-white shadow rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-          <div class="text-center py-12">
-            <svg
-              class="mx-auto h-16 w-16 text-gray-400 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 009.586 13H7"
-              ></path>
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No messages found</h3>
-            <p class="text-gray-500 mb-4">Contact messages from your website will appear here.</p>
-            <div class="text-sm text-gray-500">
-              <p>Clients can reach out through the contact form on your website.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './admin-messages.component.html',
 })
-export class AdminMessagesComponent {}
+export class AdminMessagesComponent implements OnInit {
+  messages: Contact[] = [];
+  stats: ContactStats = { total: 0, unread: 0, read: 0, replied: 0 };
+  loading = true;
+  error: string | null = null;
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalPages = 0;
+
+  // Filters
+  selectedStatus = 'all';
+  selectedType = 'all';
+  dateFrom = '';
+  searchQuery = '';
+
+  // Modal
+  showModal = false;
+  selectedMessage: Contact | null = null;
+
+  constructor(private contactService: ContactService) {}
+
+  ngOnInit(): void {
+    this.loadStats();
+    this.loadMessages();
+  }
+
+  loadStats(): void {
+    this.contactService.getStats().subscribe({
+      next: (response) => {
+        this.stats = response.data.attributes;
+      },
+      error: (error) => {
+        console.error('Error loading stats:', error);
+      },
+    });
+  }
+
+  loadMessages(): void {
+    this.loading = true;
+    this.error = null;
+
+    const filters = {
+      page: this.currentPage,
+      limit: this.itemsPerPage,
+      status: this.selectedStatus !== 'all' ? this.selectedStatus : undefined,
+      search: this.searchQuery || undefined,
+      dateFrom: this.dateFrom || undefined,
+    };
+
+    this.contactService.getMessages(filters).subscribe({
+      next: (response) => {
+        this.messages = response.data;
+        this.totalPages = response.meta.pagination.totalPages;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading messages:', error);
+        this.error = 'Failed to load messages. Please try again.';
+        this.loading = false;
+      },
+    });
+  }
+
+  onStatusFilterChange(): void {
+    this.currentPage = 1;
+    this.loadMessages();
+  }
+
+  onSearchChange(): void {
+    this.currentPage = 1;
+    this.loadMessages();
+  }
+
+  onDateFilterChange(): void {
+    this.currentPage = 1;
+    this.loadMessages();
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadMessages();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadMessages();
+    }
+  }
+
+  openMessageModal(message: Contact): void {
+    this.selectedMessage = message;
+    this.showModal = true;
+
+    // Mark as read if unread
+    if (message.attributes.status === 'unread') {
+      this.updateMessageStatus(message.id, 'read');
+    }
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.selectedMessage = null;
+  }
+
+  updateMessageStatus(id: string, status: 'read' | 'unread' | 'replied'): void {
+    this.contactService.updateStatus(id, status).subscribe({
+      next: (response) => {
+        // Update the message in the local array
+        const messageIndex = this.messages.findIndex((m) => m.id === id);
+        if (messageIndex !== -1) {
+          this.messages[messageIndex] = response.data;
+        }
+
+        // Update selected message if it's the same one
+        if (this.selectedMessage && this.selectedMessage.id === id) {
+          this.selectedMessage = response.data;
+        }
+
+        // Refresh stats
+        this.loadStats();
+      },
+      error: (error) => {
+        console.error('Error updating message status:', error);
+      },
+    });
+  }
+
+  markAsReplied(message: Contact): void {
+    this.updateMessageStatus(message.id, 'replied');
+  }
+
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'unread':
+        return 'bg-blue-100 text-blue-800';
+      case 'read':
+        return 'bg-gray-100 text-gray-800';
+      case 'replied':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  }
+
+  formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+}

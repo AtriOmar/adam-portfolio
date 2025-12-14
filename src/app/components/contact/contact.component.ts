@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { catchError, of } from 'rxjs';
+import { catchError } from 'rxjs';
+import { throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contact',
@@ -17,9 +19,9 @@ export class ContactComponent {
   contactForm: FormGroup;
   isSubmitting = false;
   submitMessage = '';
-  submitSuccess = false;
+  submitSuccess: boolean | null = null; // null = nothing, true = success, false = error
 
-  private readonly BACKEND_URL = 'http://localhost:3000'; // Change this to your backend URL
+  private readonly API_URL = environment.apiUrl;
 
   constructor() {
     this.contactForm = this.fb.group({
@@ -31,36 +33,41 @@ export class ContactComponent {
   }
 
   onSubmit() {
-    if (this.contactForm.valid) {
-      this.isSubmitting = true;
-      this.submitMessage = '';
+    if (this.contactForm.invalid) {
+      this.contactForm.markAllAsTouched();
+      return;
+    }
 
-      const formData = this.contactForm.value;
+    this.isSubmitting = true;
+    this.submitMessage = '';
+    this.submitSuccess = null;
 
-      this.http
-        .post(`${this.BACKEND_URL}/api/contact`, formData)
-        .pipe(
-          catchError((error) => {
-            console.log('Failed to send message to backend, simulating success:', error);
-            // Simulate success for demo purposes
-            return of({ success: true, message: 'Message sent successfully!' });
-          })
-        )
-        .subscribe((response) => {
+    this.http
+      .post<{ message?: string }>(`${this.API_URL}/api/contact`, this.contactForm.value)
+      .pipe(
+        catchError((error) => {
+          console.error('Contact form submission failed:', error);
+
+          this.isSubmitting = false;
+          this.submitSuccess = false;
+          this.submitMessage = 'Failed to send message. Please try again later.';
+
+          return throwError(() => error);
+        })
+      )
+      .subscribe({
+        next: () => {
           this.isSubmitting = false;
           this.submitSuccess = true;
-          this.submitMessage = "Thank you for your message! I'll get back to you soon.";
+          this.submitMessage = 'Thank you! Your message has been sent.';
           this.contactForm.reset();
-        });
-    } else {
-      // Mark all fields as touched to show validation errors
-      this.contactForm.markAllAsTouched();
-    }
+        },
+      });
   }
 
   getFieldError(fieldName: string): string {
     const field = this.contactForm.get(fieldName);
-    if (field?.errors && field.touched) {
+    if (field?.errors && field?.touched) {
       if (field.errors['required']) {
         return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
       }
