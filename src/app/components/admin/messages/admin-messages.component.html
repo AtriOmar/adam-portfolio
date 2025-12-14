@@ -232,39 +232,39 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              @for (message of messages; track message.id) {
+              @for (message of messages; track message._id) {
               <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div>
                     <div class="font-medium text-gray-900 text-sm">
-                      {{ message.attributes.name }}
+                      {{ message.name }}
                     </div>
-                    <div class="text-gray-500 text-sm">{{ message.attributes.email }}</div>
-                    @if (message.attributes.phone) {
+                    <div class="text-gray-500 text-sm">{{ message.email }}</div>
+                    @if (message.phone) {
                     <div class="text-gray-500 text-xs">
-                      {{ message.attributes.phone }}
+                      {{ message.phone }}
                     </div>
                     }
                   </div>
                 </td>
                 <td class="px-6 py-4">
                   <div class="text-gray-900 text-sm line-clamp-2">
-                    {{ message.attributes.subject }}
+                    {{ message.subject }}
                   </div>
                   <div class="max-w-xs text-gray-500 text-sm truncate">
-                    {{ message.attributes.message }}
+                    {{ message.message }}
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span
                     class="inline-flex px-2 rounded-full font-semibold text-xs"
-                    [class]="getStatusBadgeClass(message.attributes.status)"
+                    [class]="getStatusBadgeClass(message.status)"
                   >
-                    {{ message.attributes.status | titlecase }}
+                    {{ message.status | titlecase }}
                   </span>
                 </td>
                 <td class="px-6 py-4 text-gray-500 text-sm whitespace-nowrap">
-                  {{ formatDate(message.attributes.createdAt) }}
+                  {{ formatDate(message.createdAt) }}
                 </td>
                 <td class="px-6 py-4 font-medium text-sm whitespace-nowrap">
                   <button
@@ -273,7 +273,7 @@
                   >
                     View
                   </button>
-                  @if (message.attributes.status !== 'replied') {
+                  @if (message.status !== 'replied') {
                   <button
                     (click)="markAsReplied(message)"
                     class="text-green-600 hover:text-green-900"
@@ -333,24 +333,24 @@
           <div class="space-y-4 max-h-[calc(100dvh-220px)] overflow-auto">
             <div>
               <label class="block font-medium text-gray-700 text-sm">From</label>
-              <p class="mt-1 text-gray-900">{{ selectedMessage.attributes.name }}</p>
-              <p class="text-gray-500 text-sm">{{ selectedMessage.attributes.email }}</p>
-              @if (selectedMessage.attributes.phone) {
+              <p class="mt-1 text-gray-900">{{ selectedMessage.name }}</p>
+              <p class="text-gray-500 text-sm">{{ selectedMessage.email }}</p>
+              @if (selectedMessage.phone) {
               <p class="text-gray-500 text-sm">
-                {{ selectedMessage.attributes.phone }}
+                {{ selectedMessage.phone }}
               </p>
               }
             </div>
 
             <div>
               <label class="block font-medium text-gray-700 text-sm">Subject</label>
-              <p class="mt-1 text-gray-900">{{ selectedMessage.attributes.subject }}</p>
+              <p class="mt-1 text-gray-900">{{ selectedMessage.subject }}</p>
             </div>
 
             <div>
               <label class="block font-medium text-gray-700 text-sm">Message</label>
               <p class="mt-1 text-gray-900 whitespace-pre-wrap">
-                {{ selectedMessage.attributes.message }}
+                {{ selectedMessage.message }}
               </p>
             </div>
 
@@ -359,15 +359,15 @@
                 <label class="block font-medium text-gray-700 text-sm">Status</label>
                 <span
                   class="inline-flex mt-1 px-2 rounded-full font-semibold text-xs"
-                  [class]="getStatusBadgeClass(selectedMessage.attributes.status)"
+                  [class]="getStatusBadgeClass(selectedMessage.status)"
                 >
-                  {{ selectedMessage.attributes.status | titlecase }}
+                  {{ selectedMessage.status | titlecase }}
                 </span>
               </div>
               <div class="text-right">
                 <label class="block font-medium text-gray-700 text-sm">Received</label>
                 <p class="mt-1 text-gray-500 text-sm">
-                  {{ formatDate(selectedMessage.attributes.createdAt) }}
+                  {{ formatDate(selectedMessage.createdAt) }}
                 </p>
               </div>
             </div>
@@ -375,7 +375,7 @@
 
           <div class="flex justify-between mt-6">
             <div class="space-x-2">
-              @if (selectedMessage.attributes.status !== 'replied') {
+              @if (selectedMessage.status !== 'replied') {
               <button
                 (click)="markAsReplied(selectedMessage)"
                 class="inline-flex justify-center px-4 py-2 border border-transparent rounded-md bg-green-600 hover:bg-green-700 font-medium text-white text-sm"

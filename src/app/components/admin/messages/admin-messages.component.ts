@@ -40,7 +40,9 @@ export class AdminMessagesComponent implements OnInit {
   loadStats(): void {
     this.contactService.getStats().subscribe({
       next: (response) => {
-        this.stats = response.data.attributes;
+        console.log('-------------------- response.data --------------------');
+        console.log(response.data);
+        this.stats = response.data;
       },
       error: (error) => {
         console.error('Error loading stats:', error);
@@ -108,8 +110,8 @@ export class AdminMessagesComponent implements OnInit {
     this.showModal = true;
 
     // Mark as read if unread
-    if (message.attributes.status === 'unread') {
-      this.updateMessageStatus(message.id, 'read');
+    if (message.status === 'unread') {
+      this.updateMessageStatus(message._id, 'read');
     }
   }
 
@@ -122,13 +124,13 @@ export class AdminMessagesComponent implements OnInit {
     this.contactService.updateStatus(id, status).subscribe({
       next: (response) => {
         // Update the message in the local array
-        const messageIndex = this.messages.findIndex((m) => m.id === id);
+        const messageIndex = this.messages.findIndex((m) => m._id === id);
         if (messageIndex !== -1) {
           this.messages[messageIndex] = response.data;
         }
 
         // Update selected message if it's the same one
-        if (this.selectedMessage && this.selectedMessage.id === id) {
+        if (this.selectedMessage && this.selectedMessage._id === id) {
           this.selectedMessage = response.data;
         }
 
@@ -142,7 +144,7 @@ export class AdminMessagesComponent implements OnInit {
   }
 
   markAsReplied(message: Contact): void {
-    this.updateMessageStatus(message.id, 'replied');
+    this.updateMessageStatus(message._id, 'replied');
   }
 
   getStatusBadgeClass(status: string): string {

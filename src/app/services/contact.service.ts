@@ -4,17 +4,15 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Contact {
-  id: string;
-  attributes: {
-    name: string;
-    email: string;
-    phone?: string;
-    subject: string;
-    message: string;
-    status: 'unread' | 'read' | 'replied';
-    createdAt: string;
-    updatedAt: string;
-  };
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  status: 'unread' | 'read' | 'replied';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ContactStats {
@@ -39,10 +37,7 @@ export interface ContactResponse {
 }
 
 export interface ContactStatsResponse {
-  data: {
-    type: string;
-    attributes: ContactStats;
-  };
+  data: ContactStats;
 }
 
 export interface SingleContactResponse {
