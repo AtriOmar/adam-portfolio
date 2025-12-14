@@ -101,19 +101,19 @@ export class BlogEditor implements OnInit {
 
   populateForm(blog: Blog) {
     this.blogForm.patchValue({
-      title: blog.attributes.title,
-      content: blog.attributes.content,
-      excerpt: blog.attributes.excerpt || '',
-      author: blog.attributes.author,
-      category: blog.attributes.category,
-      tags: blog.attributes.tags.join(', '),
-      published: blog.attributes.published,
+      title: blog.title,
+      content: blog.content,
+      excerpt: blog.excerpt || '',
+      author: blog.author,
+      category: blog.category,
+      tags: blog.tags.join(', '),
+      published: blog.published,
       featuredImage: {
-        url: blog.attributes.featuredImage?.url || '',
-        alt: blog.attributes.featuredImage?.alt || '',
+        url: blog.featuredImage?.url || '',
+        alt: blog.featuredImage?.alt || '',
       },
-      metaDescription: blog.attributes.metaDescription || '',
-      featured: blog.attributes.featured,
+      metaDescription: blog.metaDescription || '',
+      featured: blog.featured,
     });
   }
 

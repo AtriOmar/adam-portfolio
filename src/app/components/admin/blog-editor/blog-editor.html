@@ -90,7 +90,7 @@
           formControlName="content"
           [modules]="quillModules"
           placeholder="Start writing your blog post..."
-          class="bg-white"
+          class="w-full bg-white"
         ></quill-editor>
         @if (getFieldError('content')) {
         <p class="mt-1 text-red-600 text-sm">{{ getFieldError('content') }}</p>

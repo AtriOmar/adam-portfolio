@@ -1,26 +1,24 @@
 export interface Blog {
-  id: string;
-  attributes: {
-    title: string;
-    content: string;
-    excerpt?: string;
-    author: string;
-    featuredImage?: {
-      url: string;
-      alt: string;
-    };
-    category: string;
-    tags: string[];
-    published: boolean;
-    publishedAt?: Date;
-    slug?: string;
-    views: number;
-    readTime: number;
-    metaDescription?: string;
-    featured: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+  _id: string;
+  title: string;
+  content: string;
+  excerpt?: string;
+  author: string;
+  featuredImage?: {
+    url: string;
+    alt: string;
   };
+  category: string;
+  tags: string[];
+  published: boolean;
+  publishedAt?: Date;
+  slug?: string;
+  views: number;
+  readTime: number;
+  metaDescription?: string;
+  featured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface BlogResponse {

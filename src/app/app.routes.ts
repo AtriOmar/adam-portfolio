@@ -42,6 +42,7 @@ export const routes: Routes = [
       { path: 'media', component: AdminMediaComponent },
       { path: 'blogs', component: AdminBlogsComponent },
       { path: 'blogs/new', component: BlogEditor },
+      { path: 'blogs/edit/:id', component: BlogEditor },
       { path: 'bookings', component: AdminBookingsComponent },
       { path: 'messages', component: AdminMessagesComponent },
       { path: 'users', component: AdminUsersComponent },

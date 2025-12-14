@@ -74,9 +74,9 @@ export class AdminBlogsComponent implements OnInit {
     this.blogService.getBlogs({ limit: 1000 }).subscribe({
       next: (response: BlogResponse) => {
         const allBlogs = response.data;
-        this.stats.published = allBlogs.filter((blog) => blog.attributes.published).length;
-        this.stats.drafts = allBlogs.filter((blog) => !blog.attributes.published).length;
-        this.stats.totalViews = allBlogs.reduce((total, blog) => total + blog.attributes.views, 0);
+        this.stats.published = allBlogs.filter((blog) => blog.published).length;
+        this.stats.drafts = allBlogs.filter((blog) => !blog.published).length;
+        this.stats.totalViews = allBlogs.reduce((total, blog) => total + blog.views, 0);
       },
       error: (error) => {
         console.error('Error loading stats:', error);
