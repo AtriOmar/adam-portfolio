@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { DateFormatPipe } from '../../pipes/date-format.pipe';
 
 interface CalendarDay {
   date: Date;
@@ -12,10 +14,25 @@ interface CalendarDay {
   isPast: boolean;
 }
 
+interface Reservation {
+  _id: string;
+  serviceType: string;
+  eventDate: string;
+  contactInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  message?: string;
+  status: string;
+  createdAt: string;
+}
+
 @Component({
   selector: 'app-reservation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DateFormatPipe],
   templateUrl: './reservation.component.html',
 })
 export class ReservationComponent implements OnInit {
@@ -50,28 +67,51 @@ export class ReservationComponent implements OnInit {
   submitMessage = '';
   submitSuccess = false;
 
-  private readonly BACKEND_URL = 'http://localhost:3000';
+  private readonly API_URL = environment.apiUrl;
 
-  // Mock unavailable dates for demo
-  unavailableDates = [
-    new Date(2025, 11, 15), // Dec 15
-    new Date(2025, 11, 22), // Dec 22
-    new Date(2025, 11, 25), // Dec 25
-  ];
+  // Reservations and loading state
+  reservations: Reservation[] = [];
+  isLoading = false;
+  unavailableDates: Date[] = [];
 
   constructor() {
     this.reservationForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-\(\)]{10,}$/)]],
-      sessionType: ['', Validators.required],
-      timeSlot: ['', Validators.required],
+      serviceType: ['', Validators.required],
       message: ['', Validators.maxLength(500)],
     });
   }
 
   ngOnInit() {
-    this.generateCalendar();
+    this.fetchReservations();
+  }
+
+  fetchReservations() {
+    this.isLoading = true;
+    this.http
+      .get<{ data: Reservation[] }>(`${this.API_URL}/api/reservations`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching reservations:', error);
+          return of({ data: [] });
+        })
+      )
+      .subscribe((response) => {
+        this.reservations = response.data || [];
+        this.updateUnavailableDates();
+        this.generateCalendar();
+        this.isLoading = false;
+      });
+  }
+
+  updateUnavailableDates() {
+    this.unavailableDates = this.reservations
+      .filter((reservation) => reservation.status !== 'cancelled')
+      .map((reservation) => new Date(reservation.eventDate))
+      .filter((date) => !isNaN(date.getTime())); // Filter out invalid dates
   }
 
   generateCalendar() {
@@ -98,9 +138,14 @@ export class ReservationComponent implements OnInit {
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(this.currentYear, this.currentMonth, day);
       const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
-      const isUnavailable = this.unavailableDates.some(
-        (unavailable) => unavailable.getTime() === date.getTime()
-      );
+      const isUnavailable = this.unavailableDates.some((unavailable) => {
+        const unavailableDate = new Date(unavailable);
+        return (
+          unavailableDate.getFullYear() === date.getFullYear() &&
+          unavailableDate.getMonth() === date.getMonth() &&
+          unavailableDate.getDate() === date.getDate()
+        );
+      });
 
       this.calendarDays.push({
         date,
@@ -163,30 +208,46 @@ export class ReservationComponent implements OnInit {
       this.isSubmitting = true;
       this.submitMessage = '';
 
-      const formData = {
-        ...this.reservationForm.value,
-        date: this.selectedDate.toISOString(),
-        requestedDate: this.formatDate(this.selectedDate),
+      const formValue = this.reservationForm.value;
+      const reservationData = {
+        serviceType: formValue.serviceType,
+        eventDate: this.selectedDate.toISOString(),
+        contactInfo: {
+          firstName: formValue.firstName,
+          lastName: formValue.lastName,
+          email: formValue.email,
+          phone: formValue.phone,
+        },
+        message: formValue.message || '',
+        status: 'pending',
       };
 
       this.http
-        .post(`${this.BACKEND_URL}/api/reservation`, formData)
+        .post<{ data: Reservation }>(`${this.API_URL}/api/reservations`, reservationData)
         .pipe(
           catchError((error) => {
-            console.log('Failed to send reservation to backend, simulating success:', error);
-            return of({ success: true, message: 'Reservation request sent successfully!' });
+            console.error('Error creating reservation:', error);
+            this.isSubmitting = false;
+            this.submitSuccess = false;
+            this.submitMessage = 'Failed to submit reservation. Please try again.';
+            return of(null);
           })
         )
         .subscribe((response) => {
           this.isSubmitting = false;
-          this.submitSuccess = true;
-          this.submitMessage =
-            "Your reservation request has been sent! I'll contact you within 24 hours to confirm.";
+          if (response) {
+            this.submitSuccess = true;
+            this.submitMessage =
+              "Your reservation request has been sent! I'll contact you within 24 hours to confirm.";
 
-          // Close modal after 3 seconds
-          setTimeout(() => {
-            this.closeModal();
-          }, 3000);
+            // Refresh reservations to update calendar
+            this.fetchReservations();
+
+            // Close modal after 3 seconds
+            setTimeout(() => {
+              this.closeModal();
+            }, 3000);
+          }
         });
     } else {
       this.reservationForm.markAllAsTouched();
@@ -206,7 +267,15 @@ export class ReservationComponent implements OnInit {
     const field = this.reservationForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) {
-        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required`;
+        const displayName =
+          fieldName === 'firstName'
+            ? 'First name'
+            : fieldName === 'lastName'
+            ? 'Last name'
+            : fieldName === 'serviceType'
+            ? 'Service type'
+            : fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+        return `${displayName} is required`;
       }
       if (field.errors['email']) {
         return 'Please enter a valid email address';
@@ -216,9 +285,13 @@ export class ReservationComponent implements OnInit {
       }
       if (field.errors['minlength']) {
         const requiredLength = field.errors['minlength'].requiredLength;
-        return `${
-          fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
-        } must be at least ${requiredLength} characters`;
+        const displayName =
+          fieldName === 'firstName'
+            ? 'First name'
+            : fieldName === 'lastName'
+            ? 'Last name'
+            : fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+        return `${displayName} must be at least ${requiredLength} characters`;
       }
       if (field.errors['maxlength']) {
         const maxLength = field.errors['maxlength'].requiredLength;

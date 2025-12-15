@@ -1,202 +1,242 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { catchError, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { HighlightDirective } from '../../../directives/highlight.directive';
+import { DateFormatPipe } from '../../../pipes/date-format.pipe';
+import { DateTimeFormatPipe } from '../../../pipes/date-time-format.pipe';
+
+interface Reservation {
+  _id: string;
+  serviceType: 'wedding' | 'portrait' | 'event' | 'other';
+  eventDate: string;
+  contactInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  message?: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  createdAt: string;
+}
+
+interface Stats {
+  pending: number;
+  confirmed: number;
+  completed: number;
+  cancelled: number;
+}
 
 @Component({
   selector: 'app-admin-bookings',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div>
-      <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Bookings Management</h1>
-        <p class="mt-1 text-sm text-gray-600">View and manage photography session bookings</p>
-      </div>
-
-      <!-- Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-yellow-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Pending</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Confirmed</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-blue-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Completed</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white overflow-hidden shadow rounded-lg">
-          <div class="p-5">
-            <div class="flex items-center">
-              <div class="flex-shrink-0">
-                <svg
-                  class="h-6 w-6 text-red-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </div>
-              <div class="ml-5 w-0 flex-1">
-                <dl>
-                  <dt class="text-sm font-medium text-gray-500 truncate">Cancelled</dt>
-                  <dd class="text-lg font-medium text-gray-900">0</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filters -->
-      <div class="mb-6 bg-white shadow rounded-lg p-4">
-        <div class="flex flex-wrap gap-4 items-center">
-          <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
-            <option>All Status</option>
-            <option>Pending</option>
-            <option>Confirmed</option>
-            <option>Completed</option>
-            <option>Cancelled</option>
-          </select>
-          <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
-            <option>All Sessions</option>
-            <option>Portrait</option>
-            <option>Wedding</option>
-            <option>Event</option>
-            <option>Commercial</option>
-          </select>
-          <input type="date" class="border border-gray-300 rounded-md px-3 py-2 text-sm" />
-          <div class="flex-1"></div>
-          <div class="relative">
-            <input
-              type="text"
-              placeholder="Search bookings..."
-              class="border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm w-64"
-            />
-            <svg
-              class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bookings List -->
-      <div class="bg-white shadow rounded-lg">
-        <div class="px-4 py-5 sm:p-6">
-          <div class="text-center py-12">
-            <svg
-              class="mx-auto h-16 w-16 text-gray-400 mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              ></path>
-            </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No bookings found</h3>
-            <p class="text-gray-500 mb-4">
-              Bookings will appear here when clients make reservations.
-            </p>
-            <div class="text-sm text-gray-500">
-              <p>Clients can book sessions through the reservation page on your website.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HighlightDirective,
+    DateFormatPipe,
+    DateTimeFormatPipe,
+  ],
+  templateUrl: './admin-bookings.component.html',
 })
-export class AdminBookingsComponent {}
+export class AdminBookingsComponent implements OnInit {
+  private http = inject(HttpClient);
+  private fb = inject(FormBuilder);
+
+  private readonly API_URL = environment.apiUrl;
+
+  // State management
+  reservations: Reservation[] = [];
+  filteredReservations: Reservation[] = [];
+  isLoading = false;
+  stats: Stats = {
+    pending: 0,
+    confirmed: 0,
+    completed: 0,
+    cancelled: 0,
+  };
+
+  // Filter form
+  filterForm: FormGroup;
+  searchTerm = '';
+
+  // Pagination
+  currentPage = 1;
+  itemsPerPage = 10;
+  totalItems = 0;
+
+  constructor() {
+    this.filterForm = this.fb.group({
+      status: [''],
+      serviceType: [''],
+      eventDate: [''],
+    });
+  }
+
+  ngOnInit() {
+    this.fetchReservations();
+    this.setupFilterSubscriptions();
+  }
+
+  private setupFilterSubscriptions() {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.applyFilters();
+    });
+  }
+
+  fetchReservations() {
+    this.isLoading = true;
+    const params = new URLSearchParams({
+      page: this.currentPage.toString(),
+      limit: this.itemsPerPage.toString(),
+    });
+
+    this.http
+      .get<{ data: Reservation[]; meta: any }>(`${this.API_URL}/api/reservations?${params}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching reservations:', error);
+          return of({ data: [], meta: { totalItems: 0 } });
+        })
+      )
+      .subscribe((response) => {
+        this.reservations = response.data || [];
+        this.totalItems = response.meta?.totalItems || 0;
+        this.calculateStats();
+        this.applyFilters();
+        this.isLoading = false;
+      });
+  }
+
+  calculateStats() {
+    this.stats = {
+      pending: this.reservations.filter((r) => r.status === 'pending').length,
+      confirmed: this.reservations.filter((r) => r.status === 'confirmed').length,
+      completed: this.reservations.filter((r) => r.status === 'completed').length,
+      cancelled: this.reservations.filter((r) => r.status === 'cancelled').length,
+    };
+  }
+
+  applyFilters() {
+    let filtered = [...this.reservations];
+    const filters = this.filterForm.value;
+
+    // Status filter
+    if (filters.status) {
+      filtered = filtered.filter((r) => r.status === filters.status);
+    }
+
+    // Service type filter
+    if (filters.serviceType) {
+      filtered = filtered.filter((r) => r.serviceType === filters.serviceType);
+    }
+
+    // Date filter
+    if (filters.eventDate) {
+      const filterDate = new Date(filters.eventDate).toDateString();
+      filtered = filtered.filter((r) => {
+        const eventDate = new Date(r.eventDate).toDateString();
+        return eventDate === filterDate;
+      });
+    }
+
+    // Search term filter
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (r) =>
+          r.contactInfo.firstName.toLowerCase().includes(term) ||
+          r.contactInfo.lastName.toLowerCase().includes(term) ||
+          r.contactInfo.email.toLowerCase().includes(term) ||
+          r.serviceType.toLowerCase().includes(term)
+      );
+    }
+
+    this.filteredReservations = filtered;
+  }
+
+  updateStatus(reservationId: string, event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const newStatus = selectElement.value as 'pending' | 'confirmed' | 'cancelled' | 'completed';
+    const updateData = { status: newStatus };
+
+    this.http
+      .put<{ data: Reservation }>(`${this.API_URL}/api/reservations/${reservationId}`, updateData)
+      .pipe(
+        catchError((error) => {
+          console.error('Error updating reservation:', error);
+          alert('Failed to update reservation status');
+          return of(null);
+        })
+      )
+      .subscribe((response) => {
+        if (response) {
+          // Update local data
+          const index = this.reservations.findIndex((r) => r._id === reservationId);
+          if (index !== -1) {
+            this.reservations[index].status = newStatus;
+            this.calculateStats();
+            this.applyFilters();
+          }
+        }
+      });
+  }
+
+  deleteReservation(reservationId: string) {
+    const reservation = this.reservations.find((r) => r._id === reservationId);
+    const clientName = reservation
+      ? `${reservation.contactInfo.firstName} ${reservation.contactInfo.lastName}`
+      : 'this reservation';
+
+    if (
+      !confirm(
+        `Are you sure you want to delete ${clientName}'s reservation? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    this.http
+      .delete(`${this.API_URL}/api/reservations/${reservationId}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error deleting reservation:', error);
+          alert('Failed to delete reservation');
+          return of(null);
+        })
+      )
+      .subscribe((response) => {
+        if (response !== null) {
+          // Remove from local data
+          this.reservations = this.reservations.filter((r) => r._id !== reservationId);
+          this.calculateStats();
+          this.applyFilters();
+        }
+      });
+  }
+
+  onSearch(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.searchTerm = target.value;
+    this.applyFilters();
+  }
+
+  getStatusClass(status: string): string {
+    const statusClasses = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      confirmed: 'bg-green-100 text-green-800',
+      completed: 'bg-blue-100 text-blue-800',
+      cancelled: 'bg-red-100 text-red-800',
+    };
+    return statusClasses[status as keyof typeof statusClasses] || 'bg-gray-100 text-gray-800';
+  }
+
+  clearFilters() {
+    this.filterForm.reset();
+    this.searchTerm = '';
+    this.applyFilters();
+  }
+}
