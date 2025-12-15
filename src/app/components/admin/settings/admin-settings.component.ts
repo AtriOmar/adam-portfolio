@@ -91,7 +91,7 @@ import { CommonModule } from '@angular/common';
         <!-- Save Button -->
         <div class="flex justify-end">
           <button
-            class="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
+            class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
           >
             Save Settings
           </button>

@@ -17,7 +17,7 @@ export class DateTimeFormatPipe implements PipeTransform {
       return '';
     }
 
-    return date.toLocaleString('en-US', {
+    return date.toLocaleString('en-UK', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',

@@ -132,7 +132,7 @@ export class AdminBlogsComponent implements OnInit {
       'photography-tips': 'bg-blue-100 text-blue-800',
       'videography-tips': 'bg-purple-100 text-purple-800',
       'behind-the-scenes': 'bg-green-100 text-green-800',
-      'client-stories': 'bg-pink-100 text-pink-800',
+      'client-stories': 'bg-gray-100 text-pink-800',
       tutorials: 'bg-orange-100 text-orange-800',
       'equipment-reviews': 'bg-red-100 text-red-800',
       'industry-news': 'bg-indigo-100 text-indigo-800',

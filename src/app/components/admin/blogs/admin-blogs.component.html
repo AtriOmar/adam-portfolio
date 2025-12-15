@@ -6,7 +6,7 @@
     </div>
     <button
       (click)="createNewBlog()"
-      class="px-4 py-2 rounded-md bg-pink-600 hover:bg-pink-700 font-medium text-white text-sm transition-colors"
+      class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 font-medium text-white text-sm transition-colors"
     >
       <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -165,7 +165,7 @@
         <div class="mb-2 text-red-500">{{ error }}</div>
         <button
           (click)="loadBlogs()"
-          class="px-4 py-2 rounded-md bg-pink-600 hover:bg-pink-700 font-medium text-white text-sm transition-colors"
+          class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 font-medium text-white text-sm transition-colors"
         >
           Try Again
         </button>
@@ -189,7 +189,7 @@
         <p class="mb-4 text-gray-500">Start sharing your photography stories and insights.</p>
         <button
           (click)="createNewBlog()"
-          class="px-4 py-2 rounded-md bg-pink-600 hover:bg-pink-700 font-medium text-white text-sm transition-colors"
+          class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 font-medium text-white text-sm transition-colors"
         >
           Create First Post
         </button>
@@ -353,7 +353,7 @@
                 (click)="onPageChange($index + 1)"
                 [class]="
                   $index + 1 === currentPage
-                    ? 'relative z-10 inline-flex items-center bg-pink-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-pink-600'
+                    ? 'relative z-10 inline-flex items-center bg-gray-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-pink-600'
                     : 'relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
                 "
               >

@@ -29,6 +29,7 @@
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@tailwindcss/postcss": "^4.1.17",
+    "countup.js": "^2.9.0",
     "ngx-quill": "^30.0.1",
     "postcss": "^8.5.6",
     "quill": "^2.0.3",

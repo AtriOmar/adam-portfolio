@@ -6,7 +6,7 @@
     </div>
     <button
       (click)="openUploadModal()"
-      class="px-4 py-2 rounded-md bg-pink-600 hover:bg-pink-700 font-medium text-white text-sm transition-colors"
+      class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 font-medium text-white text-sm transition-colors"
     >
       <svg class="inline w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
@@ -146,7 +146,7 @@
         </p>
         <button
           (click)="openUploadModal()"
-          class="px-4 py-2 rounded-md bg-pink-600 hover:bg-pink-700 font-medium text-white text-sm transition-colors"
+          class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-700 font-medium text-white text-sm transition-colors"
         >
           Upload Media
         </button>
@@ -301,7 +301,7 @@
               @for (page of getPageNumbers(); track page) {
               <button
                 (click)="changePage(page)"
-                [class.bg-pink-50]="page === currentPage"
+                [class.bg-gray-50]="page === currentPage"
                 [class.border-pink-500]="page === currentPage"
                 [class.text-pink-600]="page === currentPage"
                 [class.bg-white]="page !== currentPage"

@@ -18,7 +18,7 @@
             id="email"
             type="email"
             formControlName="email"
-            class="w-full px-3 py-3 border border-gray-300 focus:border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+            class="w-full px-3 py-3 border border-gray-300 focus:border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 transition-colors"
             [class.border-red-500]="getFieldError('email')"
             placeholder="Enter your email"
           />
@@ -39,7 +39,7 @@
               id="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              class="w-full px-3 py-3 pr-12 border border-gray-300 focus:border-pink-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition-colors"
+              class="w-full px-3 py-3 pr-12 border border-gray-300 focus:border-slate-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 transition-colors"
               [class.border-red-500]="getFieldError('password')"
               placeholder="Enter your password"
             />
@@ -86,7 +86,7 @@
         <button
           type="submit"
           [disabled]="isLoading"
-          class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 bg-linear-to-r from-pink-500 hover:from-pink-600 to-purple-600 hover:to-purple-700 disabled:opacity-50 font-medium text-white transition-all duration-200 disabled:cursor-not-allowed"
+          class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 bg-linear-to-r from-slate-500 hover:from-slate-600 to-black hover:to-black disabled:opacity-50 font-medium text-white transition-all duration-200 disabled:cursor-not-allowed"
         >
           @if (!isLoading) {
           <span>Sign In</span>
@@ -164,7 +164,7 @@
           Don't have an account?
           <a
             routerLink="/register"
-            class="ml-1 font-medium text-pink-500 hover:text-pink-600 transition-colors"
+            class="ml-1 font-medium text-slate-500 hover:text-slate-600 transition-colors"
           >
             Create account
           </a>
@@ -173,7 +173,7 @@
 
       <!-- Back to Home Link -->
       <div class="mt-4 text-center">
-        <a routerLink="/home" class="text-gray-500 hover:text-pink-500 text-sm transition-colors">
+        <a routerLink="/home" class="text-gray-500 hover:text-slate-500 text-sm transition-colors">
           ← Back to Home
         </a>
       </div>
