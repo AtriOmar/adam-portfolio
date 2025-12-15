@@ -52,7 +52,7 @@ export class AdminMediaComponent implements OnInit {
 
     this.mediaService.getAllMedia(filters).subscribe({
       next: (response) => {
-        this.media = response.media;
+        this.media = response.data;
         this.applySearch();
         this.currentPage = response.meta.currentPage;
         this.totalPages = response.meta.totalPages;

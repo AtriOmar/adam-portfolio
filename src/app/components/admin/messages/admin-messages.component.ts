@@ -40,8 +40,6 @@ export class AdminMessagesComponent implements OnInit {
   loadStats(): void {
     this.contactService.getStats().subscribe({
       next: (response) => {
-        console.log('-------------------- response.data --------------------');
-        console.log(response.data);
         this.stats = response.data;
       },
       error: (error) => {

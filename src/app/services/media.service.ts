@@ -23,7 +23,7 @@ export class MediaService {
   /**
    * Get all media with filtering and pagination
    */
-  getAllMedia(filters: MediaFilters = {}): Observable<{ media: Media[]; meta: any }> {
+  getAllMedia(filters: MediaFilters = {}): Observable<{ data: Media[]; meta: any }> {
     let params = new HttpParams();
 
     if (filters.category) params = params.set('category', filters.category);
@@ -33,39 +33,28 @@ export class MediaService {
     if (filters.page) params = params.set('page', filters.page.toString());
     if (filters.limit) params = params.set('limit', filters.limit.toString());
 
-    return this.http.get<MediaListApiResponse>(this.API_URL + '/api/media', { params }).pipe(
-      map((response) => ({
-        media: response.data.map((item) => this.transformApiMediaToMedia(item)),
-        meta: response.meta,
-      }))
-    );
+    return this.http.get<MediaListApiResponse>(this.API_URL + '/api/media', { params });
   }
 
   /**
    * Get single media by ID
    */
-  getMediaById(id: string): Observable<Media> {
-    return this.http
-      .get<MediaApiResponse>(`${this.API_URL}/api/media/${id}`)
-      .pipe(map((response) => this.transformApiMediaToMedia(response.data)));
+  getMediaById(id: string): Observable<{ data: Media }> {
+    return this.http.get<MediaApiResponse>(`${this.API_URL}/api/media/${id}`);
   }
 
   /**
    * Create new media
    */
-  createMedia(mediaData: CreateMediaDto): Observable<Media> {
-    return this.http
-      .post<MediaApiResponse>(`${this.API_URL}/api/media`, mediaData)
-      .pipe(map((response) => this.transformApiMediaToMedia(response.data)));
+  createMedia(mediaData: CreateMediaDto): Observable<{ data: Media }> {
+    return this.http.post<MediaApiResponse>(`${this.API_URL}/api/media`, mediaData);
   }
 
   /**
    * Update existing media
    */
-  updateMedia(id: string, mediaData: UpdateMediaDto): Observable<Media> {
-    return this.http
-      .put<MediaApiResponse>(`${this.API_URL}/api/media/${id}`, mediaData)
-      .pipe(map((response) => this.transformApiMediaToMedia(response.data)));
+  updateMedia(id: string, mediaData: UpdateMediaDto): Observable<{ data: Media }> {
+    return this.http.put<MediaApiResponse>(`${this.API_URL}/api/media/${id}`, mediaData);
   }
 
   /**
@@ -73,23 +62,5 @@ export class MediaService {
    */
   deleteMedia(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/api/media/${id}`);
-  }
-
-  /**
-   * Transform API response data to Media interface
-   */
-  private transformApiMediaToMedia(apiData: any): Media {
-    return {
-      _id: apiData.id,
-      title: apiData.attributes.title,
-      description: apiData.attributes.description,
-      type: apiData.attributes.type,
-      url: apiData.attributes.url,
-      thumbnail: apiData.attributes.thumbnail,
-      category: apiData.attributes.category,
-      featured: apiData.attributes.featured,
-      createdAt: new Date(apiData.attributes.createdAt),
-      updatedAt: new Date(apiData.attributes.updatedAt),
-    };
   }
 }
