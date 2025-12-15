@@ -1,107 +1,125 @@
-<!-- BLOG POSTS -->
-<section class="px-10 py-10">
-  <!-- Title -->
-  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em]">LATEST ARTICLES</h2>
+<section class="max-w-7xl mx-auto px-6 py-16">
+  <!-- Section title -->
+  <div class="mb-16 text-center animate-fade-in">
+    <h2 class="inline-block relative font-extralight text-4xl md:text-5xl tracking-widest">
+      <span class="z-10 relative">ARTICLES</span>
+      <span
+        class="-bottom-3 left-0 absolute w-full h-1 rounded-full bg-linear-to-r from-slate-400 via-zinc-400 to-gray-400 animate-pulse"
+      ></span>
+    </h2>
+  </div>
 
-  <!-- Loading State -->
+  <!-- Loading state -->
   @if (isLoading) {
-  <div class="text-center">
-    <p class="text-gray-600">Loading articles...</p>
+  <div class="gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    @for (_ of [1,2,3,4,5,6]; track $index) {
+    <article class="h-72 rounded-2xl bg-gray-100 animate-pulse"></article>
+    }
   </div>
   }
 
-  <!-- Blog Grid -->
+  <!-- Blogs content -->
   @if (!isLoading) {
-  <div class="max-w-6xl mx-auto">
-    <!-- Featured Posts (if any) -->
-    @if (hasFeaturedBlogs) {
-    <div class="mb-16">
-      <h3 class="mb-8 font-light text-xl text-center tracking-wider">Featured</h3>
-      <div class="gap-8 grid grid-cols-1 md:grid-cols-2">
-        @for (blog of blogs | slice : 0 : 2; track blog._id; let i = $index) { @if (blog.featured) {
-        <article class="group cursor-pointer">
-          <div class="overflow-hidden">
-            <img
-              [src]="blog.featuredImage.url"
-              [alt]="blog.featuredImage.alt"
-              class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
+  <!-- Featured blogs -->
+  @if (hasFeaturedBlogs) {
+  <div class="mb-20">
+    <h3 class="mb-10 font-light text-xl text-center tracking-wider">Featured</h3>
 
-          <div class="mt-6">
-            <div class="flex items-center gap-4 mb-3 text-gray-500 text-xs">
-              <span class="px-2 py-1 rounded bg-gray-100">{{
-                getCategoryDisplayName(blog.category)
-              }}</span>
-              <span>{{ formatDate(blog.publishedAt) }}</span>
-              <span>{{ blog.readTime }} min read</span>
-            </div>
-
-            <h3 class="mb-3 font-light group-hover:text-pink-500 text-xl transition-colors">
-              {{ blog.title }}
-            </h3>
-
-            <p class="mb-4 text-gray-600 text-sm leading-relaxed">
-              {{ blog.excerpt }}
-            </p>
-
-            <div class="flex flex-wrap gap-2">
-              @for (tag of blog.tags; track tag) {
-              <span class="px-2 py-1 rounded bg-gray-50 text-gray-400 text-xs"> #{{ tag }} </span>
-              }
-            </div>
-          </div>
-        </article>
-        } }
-      </div>
-    </div>
-    }
-
-    <!-- All Posts Grid -->
-    <div class="gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      @for (blog of blogs; track blog._id) {
-      <article class="group cursor-pointer">
-        <div class="overflow-hidden">
+    <div class="gap-10 grid grid-cols-1 md:grid-cols-2">
+      @for (blog of blogs | slice : 0 : 2; track blog._id; let i = $index) { @if (blog.featured) {
+      <article
+        tabindex="0"
+        role="article"
+        aria-label="Open article {{ blog.title }}"
+        class="group overflow-hidden rounded-2xl bg-white shadow-lg transition-transform hover:-translate-y-1 animate-fade-in-up duration-500"
+        [style.animationDelay]="i * 120 + 'ms'"
+      >
+        <div class="h-72 overflow-hidden">
           <img
             [src]="blog.featuredImage.url"
             [alt]="blog.featuredImage.alt"
-            class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           />
         </div>
 
-        <div class="mt-4">
-          <div class="flex items-center gap-3 mb-2 text-gray-500 text-xs">
-            <span class="px-2 py-1 rounded bg-gray-100 text-xs">{{
-              getCategoryDisplayName(blog.category)
-            }}</span>
+        <div class="p-6">
+          <div class="flex flex-wrap items-center gap-3 mb-4 text-gray-500 text-xs">
+            <span class="px-2 py-1 rounded bg-gray-100">
+              {{ getCategoryDisplayName(blog.category) }}
+            </span>
             <span>{{ formatDate(blog.publishedAt) }}</span>
+            <span>{{ blog.readTime }} min read</span>
           </div>
 
-          <h3
-            class="mb-2 font-light group-hover:text-pink-500 text-lg line-clamp-2 transition-colors"
-          >
+          <h4 class="mb-3 font-medium group-hover:text-pink-500 text-2xl transition-colors">
             {{ blog.title }}
-          </h3>
+          </h4>
 
-          <p class="mb-3 text-gray-600 text-sm line-clamp-3 leading-relaxed">
+          <p class="mb-4 text-gray-600 text-sm line-clamp-3 leading-relaxed">
             {{ blog.excerpt }}
           </p>
 
-          <div class="flex justify-between items-center text-gray-400 text-xs">
-            <span>{{ blog.readTime }} min read</span>
-            <span>{{ blog.views }} views</span>
+          <div class="flex flex-wrap gap-2">
+            @for (tag of blog.tags; track tag) {
+            <span class="px-2 py-1 rounded bg-gray-50 text-gray-500 text-xs">#{{ tag }}</span>
+            }
           </div>
         </div>
       </article>
-      }
+      } }
     </div>
-
-    <!-- No posts message -->
-    @if (blogs.length === 0) {
-    <div class="py-16 text-center">
-      <p class="text-gray-600">No articles available at the moment.</p>
-    </div>
-    }
   </div>
   }
+
+  <!-- All blogs grid -->
+  <div class="gap-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    @for (blog of blogs; track blog._id; let i = $index) {
+    <article
+      tabindex="0"
+      role="article"
+      aria-label="Open article {{ blog.title }}"
+      class="group overflow-hidden rounded-2xl bg-white shadow-md transition-transform hover:-translate-y-1 animate-fade-in-up duration-500"
+      [style.animationDelay]="i * 90 + 'ms'"
+    >
+      <div class="h-52 overflow-hidden">
+        <img
+          [src]="blog.featuredImage.url"
+          [alt]="blog.featuredImage.alt"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+        />
+      </div>
+
+      <div class="p-5">
+        <div class="flex items-center gap-3 mb-3 text-gray-500 text-xs">
+          <span class="px-2 py-1 rounded bg-gray-100">
+            {{ getCategoryDisplayName(blog.category) }}
+          </span>
+          <span>{{ formatDate(blog.publishedAt) }}</span>
+        </div>
+
+        <h4
+          class="mb-2 font-medium group-hover:text-pink-500 text-lg line-clamp-2 transition-colors"
+        >
+          {{ blog.title }}
+        </h4>
+
+        <p class="mb-4 text-gray-600 text-sm line-clamp-3 leading-relaxed">
+          {{ blog.excerpt }}
+        </p>
+
+        <div class="flex justify-between items-center text-gray-400 text-xs">
+          <span>{{ blog.readTime }} min read</span>
+          <span>{{ blog.views || 0 }} views</span>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+
+  <!-- Empty state -->
+  @if (blogs.length === 0) {
+  <div class="py-20 text-center">
+    <p class="text-gray-600">No articles available at the moment.</p>
+  </div>
+  } }
 </section>

@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Limelight&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap');
 @import 'tailwindcss'; /* You can add global styles to this file, and also import other style files */
 @import 'quill/dist/quill.snow.css'; /* Quill editor styles */
 
@@ -7,6 +10,11 @@
 
 @theme inline {
   --spacing-navbar: var(--navbar-height);
+
+  --font-exo: 'Exo 2', sans-serif;
+  --font-limelight: 'Limelight', cursive;
+  --font-josefin: 'Josefin Sans', sans-serif;
+  --font-berkshire: 'Berkshire Swash', cursive;
 }
 
 @utility scrollbar-stable {
