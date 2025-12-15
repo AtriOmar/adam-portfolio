@@ -7,18 +7,15 @@
     contact you within 24 hours to confirm your booking.
   </p>
 
-  @if (isLoading) {
-  <div class="flex justify-center mb-8">
-    <div class="w-8 h-8 border-pink-500 border-b-2 rounded-full animate-spin"></div>
-  </div>
-  }
-
   <div class="max-w-4xl mx-auto">
     <!-- Calendar Header -->
     <div class="flex justify-between items-center mb-8">
       <button
         (click)="previousMonth()"
         class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        [disabled]="isLoading"
+        [class.opacity-50]="isLoading"
+        [class.cursor-not-allowed]="isLoading"
         aria-label="Previous month"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,6 +35,9 @@
       <button
         (click)="nextMonth()"
         class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        [disabled]="isLoading"
+        [class.opacity-50]="isLoading"
+        [class.cursor-not-allowed]="isLoading"
         aria-label="Next month"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,21 @@
         }
       </div>
 
+      <!-- Loading Skeleton -->
+      @if (isLoading) {
+      <div class="grid grid-cols-7">
+        @for (i of [].constructor(42); track $index) {
+        <div class="relative aspect-square p-2 border-gray-200 border-r border-b bg-gray-50">
+          <div class="flex justify-center items-center h-full">
+            <div class="w-8 h-8 rounded bg-gray-200 animate-pulse"></div>
+          </div>
+        </div>
+        }
+      </div>
+      }
+
       <!-- Calendar Days -->
+      @if (!isLoading) {
       <div class="grid grid-cols-7">
         @for (calendarDay of calendarDays; track calendarDay.date.getTime()) {
         <div
@@ -103,6 +117,7 @@
         </div>
         }
       </div>
+      }
     </div>
 
     <!-- Legend -->
