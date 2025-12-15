@@ -1,10 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { DateFormatPipe } from '../../pipes/date-format.pipe';
+import { ReservationModalComponent } from './reservation-modal.component';
 
 interface CalendarDay {
   date: Date;
@@ -32,12 +31,11 @@ interface Reservation {
 @Component({
   selector: 'app-reservation',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DateFormatPipe],
+  imports: [CommonModule, ReservationModalComponent],
   templateUrl: './reservation.component.html',
 })
 export class ReservationComponent implements OnInit {
   private http = inject(HttpClient);
-  private fb = inject(FormBuilder);
 
   currentDate = new Date();
   currentMonth = this.currentDate.getMonth();
@@ -62,10 +60,6 @@ export class ReservationComponent implements OnInit {
   // Modal state
   isModalOpen = false;
   selectedDate: Date | null = null;
-  reservationForm: FormGroup;
-  isSubmitting = false;
-  submitMessage = '';
-  submitSuccess = false;
 
   private readonly API_URL = environment.apiUrl;
 
@@ -74,16 +68,7 @@ export class ReservationComponent implements OnInit {
   isLoading = false;
   unavailableDates: Date[] = [];
 
-  constructor() {
-    this.reservationForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s\-\(\)]{10,}$/)]],
-      serviceType: ['', Validators.required],
-      message: ['', Validators.maxLength(500)],
-    });
-  }
+  constructor() {}
 
   ngOnInit() {
     this.fetchReservations();
@@ -192,9 +177,6 @@ export class ReservationComponent implements OnInit {
     if (calendarDay.isAvailable && calendarDay.isCurrentMonth) {
       this.selectedDate = calendarDay.date;
       this.isModalOpen = true;
-      this.reservationForm.reset();
-      this.submitMessage = '';
-      this.submitSuccess = false;
     }
   }
 
@@ -203,101 +185,8 @@ export class ReservationComponent implements OnInit {
     this.selectedDate = null;
   }
 
-  onSubmit() {
-    if (this.reservationForm.valid && this.selectedDate) {
-      this.isSubmitting = true;
-      this.submitMessage = '';
-
-      const formValue = this.reservationForm.value;
-      const reservationData = {
-        serviceType: formValue.serviceType,
-        eventDate: this.selectedDate.toISOString(),
-        contactInfo: {
-          firstName: formValue.firstName,
-          lastName: formValue.lastName,
-          email: formValue.email,
-          phone: formValue.phone,
-        },
-        message: formValue.message || '',
-        status: 'pending',
-      };
-
-      this.http
-        .post<{ data: Reservation }>(`${this.API_URL}/api/reservations`, reservationData)
-        .pipe(
-          catchError((error) => {
-            console.error('Error creating reservation:', error);
-            this.isSubmitting = false;
-            this.submitSuccess = false;
-            this.submitMessage = 'Failed to submit reservation. Please try again.';
-            return of(null);
-          })
-        )
-        .subscribe((response) => {
-          this.isSubmitting = false;
-          if (response) {
-            this.submitSuccess = true;
-            this.submitMessage =
-              "Your reservation request has been sent! I'll contact you within 24 hours to confirm.";
-
-            // Refresh reservations to update calendar
-            this.fetchReservations();
-
-            // Close modal after 3 seconds
-            setTimeout(() => {
-              this.closeModal();
-            }, 3000);
-          }
-        });
-    } else {
-      this.reservationForm.markAllAsTouched();
-    }
-  }
-
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.reservationForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) {
-        const displayName =
-          fieldName === 'firstName'
-            ? 'First name'
-            : fieldName === 'lastName'
-            ? 'Last name'
-            : fieldName === 'serviceType'
-            ? 'Service type'
-            : fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-        return `${displayName} is required`;
-      }
-      if (field.errors['email']) {
-        return 'Please enter a valid email address';
-      }
-      if (field.errors['pattern']) {
-        return 'Please enter a valid phone number';
-      }
-      if (field.errors['minlength']) {
-        const requiredLength = field.errors['minlength'].requiredLength;
-        const displayName =
-          fieldName === 'firstName'
-            ? 'First name'
-            : fieldName === 'lastName'
-            ? 'Last name'
-            : fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
-        return `${displayName} must be at least ${requiredLength} characters`;
-      }
-      if (field.errors['maxlength']) {
-        const maxLength = field.errors['maxlength'].requiredLength;
-        return `Message cannot exceed ${maxLength} characters`;
-      }
-    }
-    return '';
+  onReservationCreated() {
+    // Refresh reservations data when a new reservation is created
+    this.fetchReservations();
   }
 }
