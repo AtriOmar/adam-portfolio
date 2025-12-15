@@ -1,52 +1,73 @@
-<!-- SELECTED PROJECTS -->
-<section class="overflow-hidden px-10 py-10">
-  <!-- Title with fade-in animation -->
-  <h2 class="mb-16 font-light text-3xl text-center tracking-[0.5em] animate-fade-in">WORK</h2>
+<section class="max-w-7xl mx-auto px-6 py-12">
+  <!-- Section title with animation -->
+  <div class="mb-16 text-center animate-fade-in">
+    <h2 class="inline-block relative font-extralight text-4xl md:text-6xl tracking-widest">
+      <span class="z-10 relative">WORK</span>
+      <span
+        class="-bottom-3 left-0 absolute w-full h-1 rounded-full bg-linear-to-r from-slate-400 via-zinc-400 to-gray-400 animate-pulse"
+      ></span>
+    </h2>
+  </div>
 
-  <!-- Enhanced Loading State with spinner -->
+  <!-- Loading state with animated skeletons -->
   @if (isLoading) {
-  <div class="py-20 text-center">
-    <div
-      class="inline-block w-12 h-12 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin"
-    ></div>
-    <p class="mt-4 text-gray-600 animate-pulse">Loading projects...</p>
+  <div class="gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    @for (_ of [1,2,3,4,5,6]; track $index) {
+    <div class="h-64 overflow-hidden rounded-2xl bg-gray-100 animate-pulse"></div>
+    }
   </div>
   }
 
-  <!-- Grid with staggered animations -->
+  <!-- Grid of projects with staggered fade-up animations -->
   @if (!isLoading) {
-  <div class="gap-x-10 gap-y-20 grid grid-cols-1 md:grid-cols-3 max-w-7xl mx-auto">
+  <div class="gap-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
     @for (item of mediaItems; track item._id; let i = $index) {
-    <div class="group animate-fade-in-up cursor-pointer" [style.animation-delay]="i * 0.1 + 's'">
-      <!-- Image Container with overlay effect -->
-      <div class="relative overflow-hidden rounded-sm bg-slate-200">
+    <article
+      tabindex="0"
+      role="button"
+      aria-label="Open project {{ item.title }}"
+      class="group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-300 shadow-lg transition-transform hover:-translate-y-1 animate-fade-in-up duration-500 transform"
+      [style.animationDelay]="i * 100 + 'ms'"
+    >
+      <!-- Image container -->
+      <div class="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden bg-slate-200">
         <img
           [src]="item.thumbnail || item.url"
           [alt]="item.title"
-          class="w-full h-64 object-cover group-hover:brightness-75 group-hover:scale-110 transition-all duration-500 ease-out"
+          class="w-full h-full object-cover group-focus:scale-105 group-hover:scale-105 transition-transform duration-700 ease-out transform"
         />
-        <!-- Overlay that appears on hover -->
+
+        <!-- Hover overlay -->
         <div
-          class="absolute inset-0 flex justify-center items-center bg-black/0 group-hover:bg-black/10 transition-all duration-300"
-        ></div>
+          class="absolute inset-0 flex items-end p-5 opacity-0 group-focus:opacity-100 group-hover:opacity-100 transition-opacity duration-500"
+        >
+          <div
+            class="w-full p-5 rounded-xl bg-linear-to-t from-black/80 via-black/50 to-black/20 text-white"
+          >
+            <h3 class="font-light text-xl md:text-2xl tracking-wide">{{ item.title }}</h3>
+            @if (item.description) {
+            <p class="mt-2 text-white/90 text-sm md:text-base line-clamp-3 leading-relaxed">
+              {{ item.description }}
+            </p>
+            }
+            <div class="flex justify-between items-center mt-4">
+              <span class="text-[10px] text-white/70 uppercase tracking-widest">{{
+                item.category || 'Work'
+              }}</span>
+              <span class="opacity-80 text-xs transition-transform group-hover:translate-x-1"
+                >View →</span
+              >
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Text Content with slide-up animation -->
-      <div class="mt-4 transition-transform group-hover:-translate-y-1 duration-300">
-        <p
-          class="font-medium text-gray-900 group-hover:text-gray-600 text-sm tracking-wide transition-colors duration-300"
-        >
-          {{ item.title }}
-        </p>
-        @if (item.description) {
-        <p
-          class="mt-2 text-gray-500 group-hover:text-gray-700 text-xs leading-relaxed transition-colors duration-300"
-        >
-          {{ item.description }}
-        </p>
-        }
+      <!-- Mobile fallback -->
+      <div class="sm:hidden mt-3 px-1">
+        <p class="font-medium text-gray-900 text-sm truncate">{{ item.title }}</p>
+        <p class="mt-1 text-gray-500 text-xs line-clamp-2">{{ item.description }}</p>
       </div>
-    </div>
+    </article>
     }
   </div>
   }
