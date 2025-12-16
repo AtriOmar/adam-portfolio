@@ -37,27 +37,14 @@ export class HighlightDirective implements OnChanges {
     }
 
     const text = this.originalContent;
-    const searchTerm = this.caseSensitive ? this.searchTerm : this.searchTerm.toLowerCase();
-    const textToSearch = this.caseSensitive ? text : text.toLowerCase();
+    const regex = new RegExp(this.escapeRegExp(this.searchTerm), this.caseSensitive ? 'g' : 'gi');
+    
+    const highlightedText = text.replace(regex, (match) => {
+      return `<mark class="bg-yellow-200 px-1 rounded">${match}</mark>`;
+    });
 
-    // Find all matches
-    const regex = new RegExp(this.escapeRegExp(searchTerm), this.caseSensitive ? 'g' : 'gi');
-    const matches = text.match(regex);
-
-    if (matches && matches.length > 0) {
-      // Replace matches with highlighted version
-      let highlightedText = text;
-      matches.forEach((match) => {
-        const highlightedMatch = `<mark class="bg-yellow-200 px-1 rounded">${match}</mark>`;
-        highlightedText = highlightedText.replace(
-          new RegExp(this.escapeRegExp(match), this.caseSensitive ? 'g' : 'gi'),
-          highlightedMatch
-        );
-      });
-
-      // Set the highlighted HTML
-      this.renderer.setProperty(element, 'innerHTML', highlightedText);
-    }
+    // Set the highlighted HTML
+    this.renderer.setProperty(element, 'innerHTML', highlightedText);
   }
 
   private escapeRegExp(string: string): string {
