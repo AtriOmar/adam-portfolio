@@ -1,0 +1,166 @@
+<div>
+  <div class="mb-6">
+    <h1 class="font-bold text-gray-900 text-2xl">Dashboard</h1>
+    <p class="mt-1 text-gray-600 text-sm">Welcome to your personal dashboard</p>
+  </div>
+
+  <!-- Quick Stats -->
+  <div class="gap-6 grid grid-cols-1 md:grid-cols-3 mb-6">
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg
+              class="w-8 h-8 text-pink-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Messages Sent</dt>
+              <dd class="font-semibold text-gray-900 text-lg">-</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg
+              class="w-8 h-8 text-blue-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Bookings</dt>
+              <dd class="font-semibold text-gray-900 text-lg">-</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg
+              class="w-8 h-8 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+          </div>
+          <div class="flex-1 w-0 ml-5">
+            <dl>
+              <dt class="font-medium text-gray-500 text-sm truncate">Active Projects</dt>
+              <dd class="font-semibold text-gray-900 text-lg">-</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="rounded-lg bg-white shadow">
+    <div class="sm:p-6 px-4 py-5">
+      <h3 class="font-medium text-gray-900 text-lg leading-6">Quick Actions</h3>
+      <div class="flow-root mt-6">
+        <ul class="divide-y divide-gray-200">
+          <li class="py-3">
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0">
+                <svg
+                  class="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-gray-900 text-sm">View My Messages</p>
+                <p class="text-gray-500 text-sm">Check your contact messages and replies</p>
+              </div>
+              <div>
+                <a
+                  href="/dashboard/messages"
+                  class="px-2.5 py-0.5 border border-gray-300 rounded-full hover:bg-gray-50 font-semibold text-gray-700 text-xs"
+                >
+                  View
+                </a>
+              </div>
+            </div>
+          </li>
+          <li class="py-3">
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0">
+                <svg
+                  class="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="font-medium text-gray-900 text-sm">Book a Session</p>
+                <p class="text-gray-500 text-sm">Schedule a new photography session</p>
+              </div>
+              <div>
+                <a
+                  href="/reservation"
+                  class="px-2.5 py-0.5 border border-gray-300 rounded-full hover:bg-gray-50 font-semibold text-gray-700 text-xs"
+                >
+                  Book
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

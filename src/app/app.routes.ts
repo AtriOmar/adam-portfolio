@@ -8,7 +8,11 @@ import { ContactComponent } from './components/contact/contact.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { AdminGuard } from './guards/admin.guard';
+import { UserGuard } from './guards/user.guard';
 import { AdminLayoutComponent } from './components/admin/admin-layout.component';
+import { UserLayoutComponent } from './components/user/user-layout.component';
+import { UserDashboardComponent } from './components/user/dashboard/user-dashboard.component';
+import { UserMessagesComponent } from './components/user/messages/user-messages.component';
 import { AdminDashboardComponent } from './components/admin/dashboard/admin-dashboard.component';
 import { AdminMediaComponent } from './components/admin/media/admin-media.component';
 import { AdminBlogsComponent } from './components/admin/blogs/admin-blogs.component';
@@ -84,6 +88,23 @@ export const routes: Routes = [
         path: 'settings',
         component: AdminSettingsComponent,
         title: 'Admin Settings | Khlif Adam',
+      },
+    ],
+  },
+  {
+    path: 'dashboard',
+    component: UserLayoutComponent,
+    canActivate: [UserGuard],
+    children: [
+      {
+        path: '',
+        component: UserDashboardComponent,
+        title: 'Dashboard | Khlif Adam',
+      },
+      {
+        path: 'messages',
+        component: UserMessagesComponent,
+        title: 'My Messages | Khlif Adam',
       },
     ],
   },

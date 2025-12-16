@@ -103,4 +103,28 @@ export class ContactService {
   }): Observable<any> {
     return this.http.post(`${this.apiUrl}`, data);
   }
+
+  // Get user's own messages (authenticated users)
+  getUserMessages(filters?: {
+    page?: number;
+    limit?: number;
+    status?: string;
+    search?: string;
+    dateFrom?: string;
+  }): Observable<ContactResponse> {
+    let params = new HttpParams();
+
+    if (filters?.page) params = params.set('page', filters.page.toString());
+    if (filters?.limit) params = params.set('limit', filters.limit.toString());
+    if (filters?.status) params = params.set('status', filters.status);
+    if (filters?.search) params = params.set('search', filters.search);
+    if (filters?.dateFrom) params = params.set('dateFrom', filters.dateFrom);
+
+    return this.http.get<ContactResponse>(`${this.apiUrl}/user/messages`, { params });
+  }
+
+  // Get user's message statistics (authenticated users)
+  getUserStats(): Observable<ContactStatsResponse> {
+    return this.http.get<ContactStatsResponse>(`${this.apiUrl}/user/stats`);
+  }
 }

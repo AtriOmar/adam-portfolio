@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-production-api-url.com', // Update this with your production URL
+  apiUrl: 'https://api.khlifadam.online', // Update this with your production URL
 };

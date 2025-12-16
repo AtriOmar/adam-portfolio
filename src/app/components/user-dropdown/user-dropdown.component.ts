@@ -48,4 +48,8 @@ export class UserDropdownComponent {
   isAdmin(): boolean {
     return this.user && this.user.accessId > 3;
   }
+
+  isUser(): boolean {
+    return this.user && this.user.accessId === 1;
+  }
 }

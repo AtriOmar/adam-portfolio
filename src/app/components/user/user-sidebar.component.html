@@ -1,0 +1,100 @@
+<aside class="top-navbar fixed w-sidebar h-[calc(100vh-var(--navbar-height))] bg-white shadow-sm">
+  <nav class="mt-6 px-3">
+    <div class="space-y-1">
+      <!-- Dashboard -->
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-gray-100 text-gray-700 border-pink-500"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="group flex items-center px-3 py-2 border-transparent border-l-4 rounded-md hover:bg-gray-100 font-medium text-gray-700 hover:text-gray-900 text-sm transition-colors"
+      >
+        <svg
+          class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+          ></path>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 5a2 2 0 012-2h2a2 2 0 012 2v2H8V5z"
+          ></path>
+        </svg>
+        Dashboard
+      </a>
+
+      <!-- My Messages -->
+      <a
+        routerLink="/dashboard/messages"
+        routerLinkActive="bg-gray-100 text-gray-700 border-pink-500"
+        class="group flex items-center px-3 py-2 border-transparent border-l-4 rounded-md hover:bg-gray-100 font-medium text-gray-700 hover:text-gray-900 text-sm transition-colors"
+      >
+        <svg
+          class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
+        </svg>
+        My Messages
+      </a>
+
+      <!-- My Bookings -->
+      <a
+        routerLink="/dashboard/bookings"
+        routerLinkActive="bg-gray-100 text-gray-700 border-pink-500"
+        class="group flex items-center px-3 py-2 border-transparent border-l-4 rounded-md hover:bg-gray-100 font-medium text-gray-700 hover:text-gray-900 text-sm transition-colors"
+      >
+        <svg
+          class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          ></path>
+        </svg>
+        My Bookings
+      </a>
+
+      <!-- Profile -->
+      <a
+        routerLink="/dashboard/profile"
+        routerLinkActive="bg-gray-100 text-gray-700 border-pink-500"
+        class="group flex items-center px-3 py-2 border-transparent border-l-4 rounded-md hover:bg-gray-100 font-medium text-gray-700 hover:text-gray-900 text-sm transition-colors"
+      >
+        <svg
+          class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+          />
+        </svg>
+        Profile
+      </a>
+    </div>
+  </nav>
+</aside>
