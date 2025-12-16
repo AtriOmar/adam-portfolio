@@ -31,9 +31,11 @@
         tabindex="0"
         role="article"
         aria-label="Open article {{ blog.title }}"
-        class="group overflow-hidden rounded-2xl bg-white shadow-lg"
+        class="group overflow-hidden rounded-2xl bg-white shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer transform"
         data-aos="fade-up"
         [attr.data-aos-delay]="i * 120"
+        (click)="navigateToBlog(blog._id)"
+        (keydown.enter)="navigateToBlog(blog._id)"
       >
         <div class="h-72 overflow-hidden">
           <img
@@ -80,9 +82,11 @@
         tabindex="0"
         role="article"
         aria-label="Open article {{ blog.title }}"
-        class="group overflow-hidden rounded-2xl bg-white shadow-md"
+        class="group overflow-hidden rounded-2xl bg-white shadow-md cursor-pointer"
         data-aos="fade-up"
         [attr.data-aos-delay]="i * 100"
+        (click)="navigateToBlog(blog._id)"
+        (keydown.enter)="navigateToBlog(blog._id)"
       >
         <div class="h-52 overflow-hidden">
           <img

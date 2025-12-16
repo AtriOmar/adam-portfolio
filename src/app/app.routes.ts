@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { MediaComponent } from './components/media/media.component';
 import { BlogsComponent } from './components/blogs/blogs.component';
+import { BlogDetailComponent } from './components/blogs/blog-detail/blog-detail.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'work', component: MediaComponent },
       { path: 'blogs', component: BlogsComponent },
+      { path: 'blogs/:id', component: BlogDetailComponent },
       { path: 'reservation', component: ReservationComponent },
       { path: 'contact', component: ContactComponent },
       { path: 'register', component: RegisterComponent },

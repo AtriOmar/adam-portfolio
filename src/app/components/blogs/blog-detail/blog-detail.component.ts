@@ -1,9 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 interface Blog {
   _id: string;
@@ -37,37 +37,50 @@ interface Blog {
 }
 
 @Component({
-  selector: 'app-blogs',
+  selector: 'app-blog-detail',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './blogs.component.html',
+  templateUrl: './blog-detail.component.html',
 })
-export class BlogsComponent implements OnInit {
+export class BlogDetailComponent implements OnInit {
   private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  blogs: Blog[] = [];
+  blog: Blog | null = null;
   isLoading = true;
+  notFound = false;
 
   private readonly API_URL = environment.apiUrl;
 
   ngOnInit() {
-    this.loadBlogs();
+    this.route.params.subscribe((params) => {
+      const blogId = params['id'];
+      if (blogId) {
+        this.loadBlog(blogId);
+      }
+    });
   }
 
-  private loadBlogs() {
+  private loadBlog(id: string) {
+    this.isLoading = true;
+    this.notFound = false;
+
     this.http
-      .get<{ data: Blog[] }>(`${this.API_URL}/api/blogs`)
+      .get<{ data: Blog }>(`${this.API_URL}/api/blogs/${id}`)
       .pipe(
         catchError((error) => {
-          console.log('Failed to fetch blogs from backend, using fake data:', error);
+          console.log('Failed to fetch blog:', error);
+          this.notFound = true;
           return of(null);
         })
       )
-      .subscribe((data) => {
-        console.log('-------------------- data?.data --------------------');
-        console.log(data?.data);
-        this.blogs = data && data.data?.length > 0 ? data?.data : [];
+      .subscribe((response) => {
+        if (response && response.data) {
+          this.blog = response.data;
+        } else {
+          this.notFound = true;
+        }
         this.isLoading = false;
       });
   }
@@ -78,10 +91,6 @@ export class BlogsComponent implements OnInit {
       month: 'long',
       day: 'numeric',
     });
-  }
-
-  get hasFeaturedBlogs(): boolean {
-    return this.blogs.some((blog) => blog.featured);
   }
 
   getCategoryDisplayName(category: string): string {
@@ -98,7 +107,7 @@ export class BlogsComponent implements OnInit {
     return categoryMap[category] || category;
   }
 
-  navigateToBlog(blogId: string) {
-    this.router.navigate(['/blogs', blogId]);
+  goBack() {
+    this.router.navigate(['/blogs']);
   }
 }
