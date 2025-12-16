@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs';
+import { catchError, Subscription } from 'rxjs';
 import { throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-contact',
@@ -12,14 +14,17 @@ import { environment } from '../../../environments/environment';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './contact.component.html',
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit, OnDestroy {
   private http = inject(HttpClient);
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   contactForm: FormGroup;
   isSubmitting = false;
   submitMessage = '';
-  submitSuccess: boolean | null = null; // null = nothing, true = success, false = error
+  submitSuccess: boolean | null = null;
+  user: User | null = null;
+  private authSubscription!: Subscription;
 
   private readonly API_URL = environment.apiUrl;
 
@@ -32,6 +37,24 @@ export class ContactComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.authSubscription = this.authService.authState$.subscribe((state) => {
+      this.user = state.user;
+      if (this.user) {
+        this.contactForm.patchValue({
+          name: this.user.username,
+          email: this.user.email,
+        });
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+
   onSubmit() {
     if (this.contactForm.invalid) {
       this.contactForm.markAllAsTouched();
@@ -42,8 +65,13 @@ export class ContactComponent {
     this.submitMessage = '';
     this.submitSuccess = null;
 
+    const contactData = { ...this.contactForm.value };
+    if (this.user) {
+      contactData.user = this.user._id;
+    }
+
     this.http
-      .post<{ message?: string }>(`${this.API_URL}/api/contact`, this.contactForm.value)
+      .post<{ message?: string }>(`${this.API_URL}/api/contact`, contactData)
       .pipe(
         catchError((error) => {
           console.error('Contact form submission failed:', error);

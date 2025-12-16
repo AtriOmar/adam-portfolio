@@ -125,9 +125,28 @@
   </div>
 
   <!-- Empty state -->
-  @if (blogs.length === 0) {
-  <div class="py-20 text-center">
-    <p class="text-gray-600">No articles available at the moment.</p>
+  } @if (!isLoading && blogs.length === 0) {
+  <div class="flex flex-col justify-center items-center py-20 text-center" data-aos="fade-up">
+    <div class="flex justify-center items-center w-24 h-24 mb-6 rounded-full bg-gray-100">
+      <svg
+        class="w-12 h-12 text-gray-400"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+        ></path>
+      </svg>
+    </div>
+    <h3 class="font-light text-gray-900 text-2xl tracking-wide">No blogs yet</h3>
+    <p class="max-w-md mt-2 text-gray-500">
+      The blogs will appear once I have some written. Please check back later!
+    </p>
   </div>
-  } }
+  }
 </section>

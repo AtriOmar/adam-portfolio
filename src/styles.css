@@ -12,6 +12,7 @@
 @theme inline {
   --spacing-navbar: var(--navbar-height);
   --spacing-sidebar: var(--sidebar-width);
+  --spacing-screen-without-navbar: calc(100vh - var(--navbar-height));
 
   --font-exo: 'Exo 2', sans-serif;
   --font-limelight: 'Limelight', cursive;

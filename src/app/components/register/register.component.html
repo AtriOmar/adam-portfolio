@@ -1,5 +1,7 @@
-<div class="min-h-screen px-4 sm:px-6 lg:px-8 py-12 bg-linear-to-br from-gray-50 to-gray-100">
-  <div class="max-w-md mx-auto">
+<div
+  class="flex items-center min-h-screen-without-navbar px-4 sm:px-6 lg:px-8 py-12 bg-linear-to-br from-gray-50 to-gray-100"
+>
+  <div class="w-full max-w-md mx-auto">
     <div class="p-8 rounded-lg bg-white shadow-xl">
       <!-- Header -->
       <div class="mb-8 text-center">
@@ -47,6 +49,26 @@
             @if (getFieldError('password', registerForm)) {
             <div class="mt-1 text-red-600 text-sm">
               {{ getFieldError('password', registerForm) }}
+            </div>
+            }
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div>
+            <label for="confirmPassword" class="block mb-2 font-medium text-gray-700 text-sm">
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="w-full px-3 py-3 border border-gray-300 focus:border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+              [class.border-red-500]="getFieldError('confirmPassword', registerForm)"
+              placeholder="Confirm your password"
+            />
+            @if (getFieldError('confirmPassword', registerForm)) {
+            <div class="mt-1 text-red-600 text-sm">
+              {{ getFieldError('confirmPassword', registerForm) }}
             </div>
             }
           </div>

@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
@@ -29,14 +36,34 @@ export class RegisterComponent {
   verificationToken = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    this.registerForm = this.fb.group(
+      {
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
 
     this.otpForm = this.fb.group({
       otp: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
     });
+  }
+
+  // Custom validator to check if passwords match
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    if (confirmPassword.value === '') {
+      return null;
+    }
+
+    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
   }
 
   onRegister() {
@@ -124,6 +151,7 @@ export class RegisterComponent {
 
   getFieldError(fieldName: string, formGroup: FormGroup): string {
     const control = formGroup.get(fieldName);
+
     if (control?.errors && control.touched) {
       if (control.errors['required']) return `${fieldName} is required`;
       if (control.errors['email']) return 'Please enter a valid email address';
@@ -131,6 +159,14 @@ export class RegisterComponent {
         return `${fieldName} must be at least ${control.errors['minlength'].requiredLength} characters`;
       if (control.errors['pattern']) return 'Please enter a valid 6-digit code';
     }
+
+    // Check for password mismatch at form level
+    if (fieldName === 'confirmPassword' && control?.touched) {
+      if (formGroup.errors?.['passwordMismatch']) {
+        return 'Passwords do not match';
+      }
+    }
+
     return '';
   }
 }
