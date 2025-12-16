@@ -31,38 +31,7 @@ export class FeaturedMediaComponent implements OnInit {
         catchError((error) => {
           console.log('Failed to fetch from backend, using fake data:', error);
           return of({
-            data: [
-              {
-                _id: '1',
-                title: 'Urban Portrait',
-                description: 'A captivating portrait session in downtown cityscape',
-                url: 'assets/images/adam.jpg',
-                thumbnail: 'assets/images/adam.jpg',
-                category: 'Portrait',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-              },
-              {
-                _id: '2',
-                title: 'Fashion Editorial',
-                description: 'Editorial fashion shoot with dramatic lighting',
-                url: 'assets/images/adam.jpg',
-                thumbnail: 'assets/images/adam.jpg',
-                category: 'Fashion',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-              },
-              {
-                _id: '3',
-                title: 'Wedding Story',
-                description: 'Intimate moments captured on a beautiful wedding day',
-                url: 'assets/images/adam.jpg',
-                thumbnail: 'assets/images/adam.jpg',
-                category: 'Event',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-              },
-            ],
+            data: [],
             meta: { currentPage: 1, totalPages: 1, totalItems: 3, itemsPerPage: 3 },
           });
         })

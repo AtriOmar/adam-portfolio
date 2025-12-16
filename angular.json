@@ -45,7 +45,7 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": ["src/styles.css", "node_modules/aos/dist/aos.css"]
           },
           "configurations": {
             "production": {

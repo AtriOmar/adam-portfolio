@@ -8,14 +8,15 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CountUp } from 'countup.js';
+import { CountUpOnViewDirective } from '../../../directives/count-up-on-view-directive';
 
 @Component({
   selector: 'app-stats-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CountUpOnViewDirective],
   templateUrl: './stats-section.component.html',
 })
-export class StatsSectionComponent implements OnInit, AfterViewInit {
+export class StatsSectionComponent {
   @ViewChildren('countElement') countElements!: QueryList<ElementRef>;
   stats = [
     {
@@ -51,32 +52,32 @@ export class StatsSectionComponent implements OnInit, AfterViewInit {
     separator: ',',
   };
 
-  ngOnInit() {}
+  // ngOnInit() {}
 
-  ngAfterViewInit() {
-    // Initialize count up animations after view is ready
-    setTimeout(() => {
-      this.initializeCounters();
-    }, 100);
-  }
+  // ngAfterViewInit() {
+  //   // Initialize count up animations after view is ready
+  //   setTimeout(() => {
+  //     this.initializeCounters();
+  //   }, 100);
+  // }
 
-  private initializeCounters() {
-    this.countElements.forEach((element, index) => {
-      if (element?.nativeElement) {
-        const countUp = new CountUp(
-          element.nativeElement,
-          this.stats[index].number,
-          this.countUpOptions
-        );
+  // private initializeCounters() {
+  //   this.countElements.forEach((element, index) => {
+  //     if (element?.nativeElement) {
+  //       const countUp = new CountUp(
+  //         element.nativeElement,
+  //         this.stats[index].number,
+  //         this.countUpOptions
+  //       );
 
-        if (!countUp.error) {
-          countUp.start();
-        } else {
-          console.error(countUp.error);
-          // Fallback: just show the number
-          element.nativeElement.textContent = this.stats[index].number.toString();
-        }
-      }
-    });
-  }
+  //       if (!countUp.error) {
+  //         countUp.start();
+  //       } else {
+  //         console.error(countUp.error);
+  //         // Fallback: just show the number
+  //         element.nativeElement.textContent = this.stats[index].number.toString();
+  //       }
+  //     }
+  //   });
+  // }
 }

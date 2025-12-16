@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import AOS from 'aos';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +9,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 })
 export class App {
   protected readonly title = signal('adam-portfolio');
+
+  ngOnInit(): void {
+    AOS.init({
+      duration: 800,
+      once: true, // animate only once
+    });
+  }
 }
