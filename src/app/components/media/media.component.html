@@ -1,6 +1,6 @@
 <section class="max-w-7xl mx-auto px-6 py-12">
   <!-- Section title with animation -->
-  <div class="mb-16 text-center animate-fade-in">
+  <div class="mb-16 text-center" data-aos="fade-up">
     <h2 class="inline-block relative font-extralight text-4xl md:text-5xl tracking-widest">
       <span class="z-10 relative">WORK</span>
       <span
@@ -26,8 +26,9 @@
       tabindex="0"
       role="button"
       aria-label="Open project {{ item.title }}"
-      class="group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-300 shadow-lg transition-transform hover:-translate-y-1 animate-fade-in-up duration-500 transform"
-      [style.animationDelay]="i * 100 + 'ms'"
+      class="group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-4 focus-visible:ring-gray-300 shadow-lg transition-transform hover:-translate-y-1"
+      data-aos="fade-up"
+      [attr.data-aos-delay]="i * 100"
     >
       <!-- Image container -->
       <div class="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden bg-slate-200">
