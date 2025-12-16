@@ -49,7 +49,7 @@ export class LoginComponent {
           // Redirect to home page after successful login
           setTimeout(() => {
             this.router.navigate(['/home']);
-          }, 1500);
+          }, 500);
         },
         error: (error) => {
           this.isLoading = false;
